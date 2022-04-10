@@ -1,0 +1,11 @@
+﻿@page
+@using API.Model
+@using Web.Pages
+@inject IConfiguration _config;
+
+@model IndexModel
+@{
+    ViewData["Title"] = "About page";
+}
+
+<partial name="_About" model="@Model.Profile"/>

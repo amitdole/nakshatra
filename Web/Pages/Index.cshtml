@@ -1,0 +1,10 @@
+﻿@page
+@using API.Model
+@inject IConfiguration _config;
+
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<partial name="_About" model="@Model.Profile"/>

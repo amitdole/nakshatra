@@ -1,0 +1,6 @@
+﻿@page
+@model AspnetRun.Web.Pages.ContactModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IConfiguration _config;
+
+<partial name="_Contact" model="@Model.Profile"/>
