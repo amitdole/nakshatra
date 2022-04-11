@@ -1,6 +1,12 @@
 name: "Build and Deploy"
 
-on: [push, workflow_dispatch]
+on:
+ workflow_dispatch:
+ push:
+   branches:
+     - 'release/22.04.01'
+ pull_request:
+   types: [opened, synchronize, reopened]
    # branches:
     #  - 'release/22.04.01'
   #  paths-ignore:
