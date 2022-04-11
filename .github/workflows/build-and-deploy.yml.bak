@@ -1,7 +1,6 @@
 name: "Build and Deploy"
 
 on: [push, workflow_dispatch]
-  push:
     branches:
       - 'release/22.04.01'
   #  paths-ignore:
