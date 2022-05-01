@@ -4,7 +4,7 @@ on:
  workflow_dispatch:
  push:
    branches:
-     - 'release/22.04.01'
+     - master
  pull_request:
    types: [opened, synchronize, reopened]
    # branches:
