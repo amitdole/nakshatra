@@ -16,25 +16,15 @@ namespace DataServices
 
         Profile IProfileRepository.GetProfile(int profileId)
         {
-            var profile = new Profile();
-            using (var httpClient = new HttpClient())
+            var data = _configuration.Metadata["UserProfiles"];
+            Profile profile = null;
+            Profile[]? profiles = JsonConvert.DeserializeObject<Profile[]>(data,
+                   new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" });
+
+            if (profiles != null && profiles.Any())
             {
-                using (var response = httpClient.GetAsync("https://localhost:44324/api/Reservation"))
-                {
-                    string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
-                    profile = JsonConvert.DeserializeObject<Profile>(apiResponse);
-                }
+                profile = profiles.Where(p => p.Id == profileId).FirstOrDefault();
             }
-
-            //var data = _configuration.Metadata["UserProfiles"];
-            //Profile profile = null;
-            //Profile[]? profiles = JsonConvert.DeserializeObject<Profile[]>(data,
-            //       new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" });
-
-            //if (profiles != null && profiles.Any())
-            //{
-            //    profile = profiles.Where(p => p.Id == profileId).FirstOrDefault();
-            //}
             return profile;
         }
     }
