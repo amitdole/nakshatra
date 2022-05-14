@@ -13,7 +13,7 @@ namespace Web
             {
 
                 var root = config.Build();
-                //config.AddAzureKeyVault($"https://{root["KeyVault:Vault"]}.vault.azure.net/", root["KeyVault:ClientId"], root["KeyVault:ClientSecret"]);
+                config.AddAzureKeyVault($"{root["KeyVault:Uri"]}", root["KeyVault:ClientId"], root["KeyVault:ClientSecret"]);
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
