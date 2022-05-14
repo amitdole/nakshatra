@@ -31,21 +31,24 @@ public class Startup
         services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<IProfileService, ProfileService>();
 
-        SecretClientOptions options = new SecretClientOptions()
-        {
-            Retry =
-        {
-            Delay= TimeSpan.FromSeconds(2),
-            MaxDelay = TimeSpan.FromSeconds(16),
-            MaxRetries = 5,
-            Mode = RetryMode.Exponential
-         }
-        };
-        var client = new SecretClient(new Uri(Configuration["Keyvault:Uri"]), new DefaultAzureCredential(), options);
+        //SecretClientOptions options = new SecretClientOptions()
+        //{
+        //    Retry =
+        //{
+        //    Delay= TimeSpan.FromSeconds(2),
+        //    MaxDelay = TimeSpan.FromSeconds(16),
+        //    MaxRetries = 5,
+        //    Mode = RetryMode.Exponential
+        // }
+        //};
+        //var client = new SecretClient(new Uri(Configuration["Keyvault:Uri"]), new DefaultAzureCredential(), options);
 
         var configDictonary = new Dictionary<string, string>();
-        configDictonary.Add("UserProfiles", client.GetSecret("UserProfiles").Value.Value);
-        configDictonary.Add("SendGridAPISecretKey", client.GetSecret("SendGridAPISecretKey").Value.Value);
+        //configDictonary.Add("UserProfiles", client.GetSecret("UserProfiles").Value.Value);
+        //configDictonary.Add("SendGridAPISecretKey", client.GetSecret("SendGridAPISecretKey").Value.Value);
+
+        configDictonary.Add("UserProfiles", Configuration["UserProfiles"]);
+        configDictonary.Add("SendGridAPISecretKey", Configuration["SendGridAPISecretKey"]);
         Action<Configuration> configuration = (opt =>
         {
             opt.Metadata = configDictonary;
