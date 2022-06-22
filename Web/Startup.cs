@@ -1,12 +1,12 @@
-﻿using API.Model;
-using API.Repositories;
+﻿using API.Repositories;
 using DataServices;
 using Microsoft.ApplicationInsights.AspNetCore;
-using Services;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Azure.Core;
 using Microsoft.Extensions.Options;
+using API.Model.Caching;
+using Services.CacheService;
+using Services.Profile;
+using API.Model.Service;
+using API.Model.Profile;
 
 public class Startup
 {
@@ -30,6 +30,21 @@ public class Startup
 
         services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<IProfileService, ProfileService>();
+
+        services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
+
+        services.AddMemoryCache();
+        services.AddTransient<MemoryCacheService>();
+        services.AddTransient<Func<CacheType, ICacheService>>(serviceProvider => key =>
+        {
+            switch (key)
+            {
+                case CacheType.Memory:
+                    return serviceProvider.GetService<MemoryCacheService>();
+                default:
+                    return serviceProvider.GetService<MemoryCacheService>();
+            }
+        });
 
         //SecretClientOptions options = new SecretClientOptions()
         //{

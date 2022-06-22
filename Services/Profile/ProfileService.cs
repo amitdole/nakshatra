@@ -1,7 +1,8 @@
-﻿using API.Model;
-using API.Repositories;
+﻿using API.Repositories;
+using API.Model.Service;
+using API.Model.Profile;
 
-namespace Services
+namespace Services.Profile
 {
     public class ProfileService : IProfileService
     {
@@ -9,9 +10,9 @@ namespace Services
         public ProfileService(IProfileRepository profileRepository)
         {
             if (profileRepository != null)
-                this._profileRepository = profileRepository;
+                _profileRepository = profileRepository;
         }
-        public Profile GetProfile(int profileId)
+        public ProfileInfo GetProfile(int profileId)
         {
             return _profileRepository.GetProfile(profileId);
         }

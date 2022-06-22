@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using API.Model;
+﻿using API.Model.Profile;
 using Newtonsoft.Json;
 
-namespace Services
+namespace Services.Profile
 {
     public class BloggerService : IBloggerService
     {
@@ -17,7 +16,7 @@ namespace Services
             //add search
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                googleBloggerApi = googleBloggerApi + ($"&labels={searchTerm}");
+                googleBloggerApi = googleBloggerApi + $"&labels={searchTerm}";
             }
 
             using (var httpClient = new HttpClient())
@@ -34,13 +33,13 @@ namespace Services
                 //if not 1st page, use nextPageToken to get next page
                 if (nextPageToken != null)
                 {
-                    postUrl = postUrl + ($"&pageToken={nextPageToken}");
+                    postUrl = postUrl + $"&pageToken={nextPageToken}";
                 }
 
                 //add search
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
-                    postUrl = postUrl + ($"&labels={searchTerm}");
+                    postUrl = postUrl + $"&labels={searchTerm}";
                 }
                 using (var response = httpClient.GetAsync(postUrl))
                 {

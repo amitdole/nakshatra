@@ -1,6 +1,6 @@
 ﻿using SendGrid;
 
-namespace Services
+namespace Services.Profile
 {
     public interface IEmailService
     {

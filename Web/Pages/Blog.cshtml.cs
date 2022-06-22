@@ -1,8 +1,12 @@
-using API.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Web.Models;
-using Services;
+using Services.Profile;
+using API.Model.Service;
+using API.Model.Profile;
+using API.Model.Caching;
+using Services.CacheService;
+using Services.Extensions;
 
 namespace AspnetRun.Web.Pages
 {
@@ -11,20 +15,31 @@ namespace AspnetRun.Web.Pages
         private readonly ILogger<BlogModel> _logger;
         private readonly IConfiguration _configuration;
         private IProfileService _profileService;
+        private readonly Func<CacheType, ICacheService> _cacheService;
 
         [BindProperty]
         public Posts Posts { get; set; }
 
-        public BlogModel(ILogger<BlogModel> logger, IConfiguration configuration, IProfileService profileService)
+        public BlogModel(ILogger<BlogModel> logger, IConfiguration configuration, IProfileService profileService, Func<CacheType, ICacheService> cacheService)
         {
             _logger = logger;
             _configuration = configuration;
             _profileService = profileService;
+            _cacheService = cacheService;
         }
 
         public IActionResult OnGet(int? blog_page, string search)
         {
-            var profile = _profileService.GetProfile(10001);
+            var userProfileCacheKey = $"user_profile";
+            var cacheProvider = _configuration["CacheProvider"].ToEnum<CacheType>();
+
+            if (!_cacheService(cacheProvider).TryGet(userProfileCacheKey, out ProfileInfo profile))
+            {
+                profile = _profileService.GetProfile(int.Parse(_configuration["Profile:Id"]));
+                _cacheService(cacheProvider).Set(userProfileCacheKey, profile);
+            }
+
+            //var profile = _profileService.GetProfile(10001);
             var blogInfo = profile.BlogDetails.Where(b => b.Name.Equals("dotnetkari")).FirstOrDefault();
             var page = blog_page;
             // if on default page then page = 1
@@ -35,14 +50,27 @@ namespace AspnetRun.Web.Pages
 
             var _bloggerService = new BloggerService();
 
-            //Build Pagination
-            var blogPages = BuildBloggerPagger(_bloggerService, search, blogInfo);
+            var bloggerPaginationCacheKey = $"dotnetkari_blogger_pagination";
 
-            //Get all posts
-            Posts = _bloggerService.GetBlogs(blogInfo, blogPages[page ?? 1], search);
+            if (!_cacheService(cacheProvider).TryGet(bloggerPaginationCacheKey, out Dictionary<int, string> blogPages))
+            {
+                //Build Pagination
+                blogPages = BuildBloggerPagger(_bloggerService, search, blogInfo);
+                _cacheService(cacheProvider).Set(bloggerPaginationCacheKey, blogPages);
+            }
 
+            var bloggerPostsCacheKey = $"dotnetkari_blogger_posts";
+
+            if (!_cacheService(cacheProvider).TryGet(bloggerPostsCacheKey, out Posts posts))
+            {
+                //Build Pagination
+                posts = _bloggerService.GetBlogs(blogInfo, blogPages[page ?? 1], search);
+                _cacheService(cacheProvider).Set(bloggerPostsCacheKey, blogPages);
+            }
+
+            Posts = posts;
             //Pages * total post per page [10]
-            Posts.TotalItems = blogPages.Count * 10;
+            posts.TotalItems = blogPages.Count * 10;
 
             ViewData["BlogPage"] = page;
             return Page();

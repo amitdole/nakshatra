@@ -1,8 +1,8 @@
 ﻿using API.Model.Profile;
 
-namespace API.Repositories
+namespace API.Model.Service
 {
-    public interface IProfileRepository
+    public interface IProfileService
     {
         ProfileInfo GetProfile(int profileId);
     }
