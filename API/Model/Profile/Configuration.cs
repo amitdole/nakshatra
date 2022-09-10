@@ -1,4 +1,4 @@
-﻿namespace API.Model
+﻿namespace API.Model.Profile
 {
     public class Configuration
     {

@@ -4,7 +4,7 @@ namespace Api.Entities.Profile
 {
     public record BlogInfo
     {
-        public int BlogId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Api { get; set; }
         public string Url { get; set; }

@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Web.Models;
-using API.Model;
-using Services;
+using Services.Profile;
+using API.Model.Service;
+using API.Model.Profile;
 
 namespace AspnetRun.Web.Pages
 {
@@ -14,7 +15,7 @@ namespace AspnetRun.Web.Pages
       
 
         [BindProperty]
-        public API.Model.Profile Profile { get; set; }
+        public ProfileInfo Profile { get; set; }
 
         public ContactModel(ILogger<AboutModel> logger, IProfileService profileService, Configuration config)
         {

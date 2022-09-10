@@ -1,22 +1,21 @@
-using API.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services;
-using Web.Models;
+using API.Model.Service;
+using API.Model.Profile;
 
 namespace AspnetRun.Web.Pages
 {
     public class _ContactModel : PageModel
     {
         private readonly IConfiguration _config;
-        private readonly API.Model.Profile _profile;
+        private readonly ProfileInfo _profile;
 
         private IProfileService _profileService;
 
         [BindProperty]
-        public API.Model.Profile Profile { get; set; }
+        public ProfileInfo Profile { get; set; }
 
-        public _ContactModel(IConfiguration config, API.Model.Profile profile)
+        public _ContactModel(IConfiguration config, ProfileInfo profile)
         {
             _profile = profile;
         }
@@ -27,7 +26,7 @@ namespace AspnetRun.Web.Pages
             return Page();
         }
 
-        public IActionResult OnGet(API.Model.Profile profile)
+        public IActionResult OnGet(ProfileInfo profile)
         {
             Profile = profile;
 

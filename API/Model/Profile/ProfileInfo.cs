@@ -1,7 +1,7 @@
-﻿namespace API.Model
+﻿namespace API.Model.Profile
 {
     [Serializable]
-    public class Profile
+    public class ProfileInfo
     {
         public int Id { get; set; }
         public Personal PersonalDetails { get; set; }

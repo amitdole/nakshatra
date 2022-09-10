@@ -1,4 +1,5 @@
-using API.Model;
+using API.Model.Service;
+using API.Model.Profile;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,7 +11,7 @@ namespace AspnetRun.Web.Pages
         private IProfileService _profileService;
 
         [BindProperty]
-        public API.Model.Profile Profile { get; set; }
+        public ProfileInfo Profile { get; set; }
 
         public AboutModel(ILogger<AboutModel> logger, IProfileService profileService)
         {

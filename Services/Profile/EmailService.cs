@@ -1,9 +1,9 @@
-﻿using API.Model;
+﻿using API.Model.Profile;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace Services
+namespace Services.Profile
 {
     public class EmailService : IEmailService
     {

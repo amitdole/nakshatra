@@ -1,5 +1,6 @@
-﻿using API.Model;
-namespace Services
+﻿using API.Model.Profile;
+
+namespace Services.Profile
 {
     public interface IBloggerService
     {

@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "28a4048d-e99c-4920-bf3b-feb1d420e14b",
+		"name": "Surya",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20496696"
+	},
+	"item": [
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{surya.api}}/api/profile",
+							"protocol": "http",
+							"host": [
+								"{{surya.api}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{surya.api}}/api/profile/10001",
+							"protocol": "http",
+							"host": [
+								"{{surya.api}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"10001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"personalDetails\": {\r\n        \"id\": 10001,\r\n        \"firstName\": \"Amit\",\r\n        \"lastName\": \"Dole\",\r\n        \"email\": \"amit_dole@outlook.com\",\r\n        \"phone\": \"111-111-1112\",\r\n        \"dateofBirth\": \"1982-11-01T00:00:00\",\r\n        \"addressId\": 10003\r\n    },\r\n    \"educationDetails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"qualification\": \"Post Graduate Diploma in Business Administration\",\r\n            \"college\": \"SCDL (Symbiosis)\",\r\n            \"addressId\": 10001,\r\n            \"startDate\": \"2005-06-01T00:00:00\",\r\n            \"endDate\": \"2009-06-01T00:00:00\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"qualification\": \"Post Graduate Diploma in Advanced Computing\",\r\n            \"college\": \"CDAC\",\r\n            \"addressId\": 10002,\r\n            \"startDate\": \"2004-02-01T00:00:00\",\r\n            \"endDate\": \"2004-07-30T00:00:00\"\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"qualification\": \"Bachelor of Computer Science\",\r\n            \"college\": \"Pune University\",\r\n            \"addressId\": 10001,\r\n            \"startDate\": \"2000-06-01T00:00:00\",\r\n            \"endDate\": \"2003-10-01T00:00:00\"\r\n        }\r\n    ],\r\n    \"companyDetails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Cybage Software Pvt Ltd.\",\r\n            \"addressId\": 10001\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Cybage Software Inc.\",\r\n            \"addressId\": 10003\r\n        }\r\n    ],\r\n    \"experienceDetails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"role\": \"Senior/Software Engineer\",\r\n            \"companyId\": 10001,\r\n            \"startDate\": \"2004-08-16T00:00:00\",\r\n            \"endDate\": \"2009-04-30T00:00:00\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"role\": \"Senior/System Analyst\",\r\n            \"companyId\": 10001,\r\n            \"startDate\": \"2009-05-01T00:00:00\",\r\n            \"endDate\": \"2014-10-04T00:00:00\"\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"role\": \"Programmer Analyst\",\r\n            \"companyId\": 10002,\r\n            \"startDate\": \"2014-10-06T00:00:00\",\r\n            \"endDate\": null\r\n        }\r\n    ],\r\n    \"skillDetails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \".NET Core\",\r\n            \"technology\": \".NET\",\r\n            \"description\": \"\",\r\n            \"proficency\": 80\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"ASP.NET MVC\",\r\n            \"technology\": \".NET\",\r\n            \"description\": \"\",\r\n            \"proficency\": 90\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"name\": \"C#\",\r\n            \"technology\": \".NET\",\r\n            \"description\": \"\",\r\n            \"proficency\": 90\r\n        },\r\n        {\r\n            \"id\": 4,\r\n            \"name\": \"MS Sql Server\",\r\n            \"technology\": \"DataStore\",\r\n            \"description\": \"\",\r\n            \"proficency\": 90\r\n        },\r\n        {\r\n            \"id\": 5,\r\n            \"name\": \"ELK stack\",\r\n            \"technology\": \"DataStore\",\r\n            \"description\": \"\",\r\n            \"proficency\": 80\r\n        }\r\n    ],\r\n    \"workFlowDetails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Research and Plan\",\r\n            \"description\": \"Requirement analysis, feasibility study and proposing solutions.\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Design and Develop\",\r\n            \"description\": \"Architecting modules, developing integrations and APIs using .NET Core.\"\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"name\": \"Deliver\",\r\n            \"description\": \"Unit Test, QA & Deliver.\"\r\n        }\r\n    ],\r\n    \"addressDetails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"city\": \"Pune\",\r\n            \"state\": \"Maharashtra\",\r\n            \"country\": \"India\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"city\": \"Mumbai\",\r\n            \"state\": \"Maharashtra\",\r\n            \"country\": \"India\"\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"city\": \"Los Angeles area\",\r\n            \"state\": \"California\",\r\n            \"country\": \"United States\"\r\n        }\r\n    ],\r\n    \"profileDetails\": [\r\n        \"E-commerce domain, product development and implementation.\",\r\n        \"Technologies: ASP.NET MVC, .NET Core, MS SQL Server, ELK stack, EDI, API.\",\r\n        \"Roles: Project/Team lead, technical solution provider, design and development, planning, mentoring and production support.\",\r\n        \"Client interactions and reporting to senior management.\",\r\n        \"Product Integration and Implementation.\"\r\n    ],\r\n    \"shortDescription\": \"I am a .NET Programmer Analyst with industry experience building web applications. When not building software I like to travel, trek, read books and stay updated. Take a look at my work !\",\r\n    \"longDescription1\": \"I love building Software through highly scalable architecture and Systems and to define, develop, test, analyze, and maintain new software applications in the achievement of business requirements.\",\r\n    \"longDescription2\": \"My 17.5 years of experience, including 7.5 years as onsite Programmer Analyst summarizes as a programmer analyst, project leader, technical leader, and a great team player. Excellent interpersonal skills, leadership skills, mentoring skills and organizational skills.\",\r\n    \"blogDetails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"dotnetkari\",\r\n            \"api\": \"https://www.googleapis.com/\",\r\n            \"url\": \"https://dotnetkari.blogspot.com/\",\r\n            \"key\": \"AIzaSyDW2fWQVUG5Rv0QYGPcjs8MrGINaMr_nF4\"\r\n        }\r\n    ],\r\n    \"id\": 10001\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{surya.api}}/api/profile",
+							"protocol": "http",
+							"host": [
+								"{{surya.api}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{surya.api}}/api/profile/10001",
+							"protocol": "http",
+							"host": [
+								"{{surya.api}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"10001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 10001,\r\n    \"PersonalDetails\": {\r\n        \"personalId\": 10001,\r\n        \"FirstName\": \"Amit\",\r\n        \"LastName\": \"Dole\",\r\n        \"Email\": \"amit_dole@outlook.com\",\r\n        \"DateofBirth\": \"1982-11-01\",\r\n        \"AddressId\": 10003,\r\n        \"Phone\": \"111-111-1111\"\r\n    },\r\n    \"AddressDetails\": [\r\n        {\r\n            \"addressId\": 10001,\r\n            \"City\": \"Pune\",\r\n            \"State\": \"Maharashtra\",\r\n            \"Country\": \"India\"\r\n        },\r\n        {\r\n            \"addressId\": 10002,\r\n            \"City\": \"Mumbai\",\r\n            \"State\": \"Maharashtra\",\r\n            \"Country\": \"India\"\r\n        },\r\n        {\r\n            \"addressId\": 10003,\r\n            \"City\": \"Los Angeles area\",\r\n            \"State\": \"California\",\r\n            \"Country\": \"United States\"\r\n        }\r\n    ],\r\n    \"EducationDetails\": [\r\n        {\r\n            \"educationId\": 10003,\r\n            \"Qualification\": \"Post Graduate Diploma in Business Administration\",\r\n            \"College\": \"SCDL (Symbiosis)\",\r\n            \"AddressId\": 10001,\r\n            \"StartDate\": \"2005-06-01\",\r\n            \"EndDate\": \"2009-06-01\"\r\n        },\r\n        {\r\n            \"educationId\": 10002,\r\n            \"Qualification\": \"Post Graduate Diploma in Advanced Computing\",\r\n            \"College\": \"CDAC\",\r\n            \"AddressId\": 10002,\r\n            \"StartDate\": \"2004-02-01\",\r\n            \"EndDate\": \"2004-07-30\"\r\n        },\r\n        {\r\n            \"educationId\": 10001,\r\n            \"Qualification\": \"Bachelor of Computer Science\",\r\n            \"College\": \"Pune University\",\r\n            \"AddressId\": 10001,\r\n            \"StartDate\": \"2000-06-01\",\r\n            \"EndDate\": \"2003-10-01\"\r\n        }\r\n    ],\r\n    \"CompanyDetails\": [\r\n        {\r\n            \"companyId\": 10001,\r\n            \"Name\": \"Cybage Software Pvt Ltd.\",\r\n            \"AddressId\": 10001,\r\n            \"StartDate\": \"2004-08-16\",\r\n            \"EndDate\": \"2014-10-04\"\r\n        },\r\n        {\r\n            \"companyId\": 10002,\r\n            \"Name\": \"Cybage Software Inc.\",\r\n            \"AddressId\": 10003,\r\n            \"StartDate\": \"2014-10-06\"\r\n        }\r\n    ],\r\n    \"ExperienceDetails\": [\r\n        {\r\n            \"experienceId\": 10001,\r\n            \"Role\": \"Senior/Software Engineer\",\r\n            \"CompanyId\": 10001,\r\n            \"StartDate\": \"2004-08-16\",\r\n            \"EndDate\": \"2009-04-30\"\r\n        },\r\n        {\r\n            \"experienceId\": 10002,\r\n            \"Role\": \"Senior/System Analyst\",\r\n            \"CompanyId\": 10001,\r\n            \"StartDate\": \"2009-05-01\",\r\n            \"EndDate\": \"2014-10-04\"\r\n        },\r\n        {\r\n            \"experienceId\": 10003,\r\n            \"Role\": \"Programmer Analyst\",\r\n            \"CompanyId\": 10002,\r\n            \"StartDate\": \"2014-10-06\"\r\n        }\r\n    ],\r\n    \"SkillDetails\": [\r\n        {\r\n            \"skillId\": 10001,\r\n            \"Name\": \".NET Core\",\r\n            \"Technology\": \".NET\",\r\n            \"Description\": \"\",\r\n            \"Proficency\": 80\r\n        },\r\n        {\r\n            \"skillId\": 10002,\r\n            \"Name\": \"ASP.NET MVC\",\r\n            \"Technology\": \".NET\",\r\n            \"Description\": \"\",\r\n            \"Proficency\": 90\r\n        },\r\n        {\r\n            \"skillId\": 10003,\r\n            \"Name\": \"C#\",\r\n            \"Technology\": \".NET\",\r\n            \"Description\": \"\",\r\n            \"Proficency\": 90\r\n        },\r\n        {\r\n            \"Id\": 10004,\r\n            \"Name\": \"MS Sql Server\",\r\n            \"Technology\": \"DataStore\",\r\n            \"Description\": \"\",\r\n            \"Proficency\": 90\r\n        },\r\n        {\r\n            \"skillId\": 10005,\r\n            \"Name\": \"ELK stack\",\r\n            \"Technology\": \"DataStore\",\r\n            \"Description\": \"\",\r\n            \"Proficency\": 80\r\n        }\r\n    ],\r\n    \"WorkFlowDetails\": [\r\n        {\r\n            \"workflowId\": 10001,\r\n            \"Name\": \"Research and Plan\",\r\n            \"Description\": \"Requirement analysis, feasibility study and proposing solutions.\"\r\n        },\r\n        {\r\n            \"workflowId\": 10002,\r\n            \"Name\": \"Design and Develop\",\r\n            \"Description\": \"Architecting modules, developing integrations and APIs using .NET Core.\"\r\n        },\r\n        {\r\n            \"workflowId\": 10003,\r\n            \"Name\": \"Deliver\",\r\n            \"Description\": \"Unit Test, QA & Deliver.\"\r\n        }\r\n    ],\r\n    \"ProfileDetails\": [\r\n        \"E-commerce domain, product development and implementation.\",\r\n        \"Technologies: ASP.NET MVC, .NET Core, MS SQL Server, ELK stack, EDI, API.\",\r\n        \"Roles: Project/Team lead, technical solution provider, design and development, planning, mentoring and production support.\",\r\n        \"Client interactions and reporting to senior management.\",\r\n        \"Product Integration and Implementation.\"\r\n    ],\r\n    \"ShortDescription\": \"I am a .NET Programmer Analyst with industry experience building web applications. When not building software I like to travel, trek, read books and stay updated. Take a look at my work !\",\r\n    \"LongDescription1\": \"I love building Software through highly scalable architecture and Systems and to define, develop, test, analyze, and maintain new software applications in the achievement of business requirements.\",\r\n    \"LongDescription2\": \"My 17.5 years of experience, including 7.5 years as onsite Programmer Analyst summarizes as a programmer analyst, project leader, technical leader, and a great team player. Excellent interpersonal skills, leadership skills, mentoring skills and organizational skills.\",\r\n    \"BlogDetails\": [\r\n        {\r\n            \"blogId\": 10001,\r\n            \"name\": \"dotnetkari\",\r\n            \"api\": \"https://www.googleapis.com/\",\r\n            \"url\": \"https://dotnetkari.blogspot.com/\",\r\n            \"key\": \"AIzaSyDW2fWQVUG5Rv0QYGPcjs8MrGINaMr_nF4\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{surya.api}}/api/profile",
+							"protocol": "http",
+							"host": [
+								"{{surya.api}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

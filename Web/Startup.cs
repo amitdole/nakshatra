@@ -1,12 +1,12 @@
-﻿using API.Model;
-using API.Repositories;
+﻿using API.Repositories;
 using DataServices;
 using Microsoft.ApplicationInsights.AspNetCore;
-using Services;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using Azure.Core;
 using Microsoft.Extensions.Options;
+using API.Model.Caching;
+using Services.CacheService;
+using Services.Profile;
+using API.Model.Service;
+using API.Model.Profile;
 
 public class Startup
 {
@@ -31,25 +31,25 @@ public class Startup
         services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<IProfileService, ProfileService>();
 
-        //SecretClientOptions options = new SecretClientOptions()
-        //{
-        //    Retry =
-        //{
-        //    Delay= TimeSpan.FromSeconds(2),
-        //    MaxDelay = TimeSpan.FromSeconds(16),
-        //    MaxRetries = 5,
-        //    Mode = RetryMode.Exponential
-        // }
-        //};
-        //var client = new SecretClient(new Uri(Configuration["Keyvault:Uri"]), new DefaultAzureCredential(), options);
+        services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
+
+        services.AddMemoryCache();
+        services.AddTransient<MemoryCacheService>();
+        services.AddTransient<Func<CacheType, ICacheService>>(serviceProvider => key =>
+        {
+            switch (key)
+            {
+                case CacheType.Memory:
+                    return serviceProvider.GetService<MemoryCacheService>();
+                default:
+                    return serviceProvider.GetService<MemoryCacheService>();
+            }
+        });
 
         var configDictonary = new Dictionary<string, string>();
-        //configDictonary.Add("UserProfiles", client.GetSecret("UserProfiles").Value.Value);
-        //configDictonary.Add("SendGridAPISecretKey", client.GetSecret("SendGridAPISecretKey").Value.Value);
-
         configDictonary.Add("UserProfiles", Configuration["UserProfiles"]);
         configDictonary.Add("SendGridAPISecretKey", Configuration["SendGridAPISecretKey"]);
-
+        
         Action<Configuration> configuration = (opt =>
         {
             opt.Metadata = configDictonary;
