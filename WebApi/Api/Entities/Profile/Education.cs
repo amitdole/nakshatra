@@ -4,7 +4,7 @@ namespace Api.Entities.Profile
 {
     public record Education
     {
-        public int EducationId { get; set; }
+        public int Id { get; set; }
         public string Qualification { get; set; }
         public string College { get; set; }
         public int AddressId { get; set; }

@@ -3,6 +3,7 @@ using API.Repositories;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using API.Model.Profile;
+using Microsoft.Extensions.Hosting;
 
 namespace DataServices
 {
@@ -21,6 +22,8 @@ namespace DataServices
             var profile = new ProfileInfo();
             using (var httpClient = new HttpClient())
             {
+                //IHostingEnvironment env;
+                //var t = HostingEnvironmentExtensions.IsDevelopment(env);
                 using (var response = httpClient.GetAsync($"{_appSettings["SuryaWebApi:Endpoint"]}/api/profile/{_appSettings["Profile:Id"]}"))
                 {
                     string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
