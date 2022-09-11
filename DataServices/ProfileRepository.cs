@@ -32,8 +32,8 @@ namespace DataServices
             }
              
             var data = _configuration.Metadata["UserProfiles"];
-            Profile profile = null;
-            Profile[]? profiles = JsonConvert.DeserializeObject<Profile[]>(data,
+          
+            ProfileInfo[]? profiles = JsonConvert.DeserializeObject<ProfileInfo[]>(data,
                    new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" });
 
             if (profiles != null && profiles.Any())

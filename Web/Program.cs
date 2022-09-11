@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+
 namespace Web
 {
     public class Program
@@ -11,9 +13,8 @@ namespace Web
            Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((context, config) =>
             {
-
                 var root = config.Build();
-                config.AddAzureKeyVault($"{root["KeyVault:Uri"]}", root["KeyVault:ClientId"], root["KeyVault:ClientSecret"]);
+                config.AddAzureKeyVault($"{root["Keyvault:Uri"]}");
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
