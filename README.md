@@ -49,7 +49,12 @@ Below is the current architecture of the Nakshtra suite. Its evolving and I woul
           
     * Constant Improvement
        * I use PDCA-plan-do-check-act as repetitive four-stage model for continuous improvements.
+       
+      ![leanmanagement](leanmanagement.png)
 - **Workflow**
+  
+     ![pm_workflow](pm_workflow.png)
+
 - **Release Management**
     Nakshatra would have 2 releases per month.
 
