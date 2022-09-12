@@ -1,20 +1,21 @@
-# Nakshtra suite
+# Nakshtra
 
 Nakshatra (Sanskrit: नक्षत्र,) is the traditional constellation of stars in the sky as per ancient Indian Astronomy. A nakshatra is one of 27 sectors along the ecliptic. Their names are related to a prominent star or asterisms in or near the respective sectors. This repository is suite of products which I have created for my use to begin with and later to expand for general utility. 
 
 # Contents
 - [Overview](#overview)
-- [Topics](#topic)
+- [Modules](#module)
+- [Project Management](#management)
 - [Contribute](#contribute)
 - [Code of Conduct](#conduct)
 - [Contact](#contact)
 
 ## Overview <a name="overview"></a>
-Below is the current architecture of the Nakshtra suite. Its evolving and I would keep updating it.
+Below is the current architecture of the Nakshtra project. Its evolving and I would keep updating it.
 
-## Topics <a name="topic"></a>
-  * [amitdole.com](https://github.com/amitdole/nakshatra/blob/master/Web/README.md): My personal website
-  * [surya web api](https://github.com/amitdole/nakshatra/blob/master/WebApi/README.md): Web Api suite
+## Modules <a name="module"></a>
+  * Website - [amitdole.com](https://github.com/amitdole/nakshatra/blob/master/Web/README.md): My personal website
+  * Web Api - [surya web api](https://github.com/amitdole/nakshatra/blob/master/WebApi/README.md): Web Api suite
 
 ## Project Management <a name="management"></a>
 - **Summary**\
