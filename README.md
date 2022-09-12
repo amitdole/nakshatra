@@ -13,8 +13,8 @@ Nakshatra (Sanskrit: नक्षत्र,) is the traditional constellation of
 Below is the current architecture of the Nakshtra suite. Its evolving and I would keep updating it.
 
 ## Topics <a name="topic"></a>
-  * [amitdole.com](https://github.com/amitdole/nakshatra/blob/master/Web/README.md)
-  * [surya web api](https://github.com/amitdole/nakshatra/blob/master/WebApi/README.md)
+  * [amitdole.com](https://github.com/amitdole/nakshatra/blob/master/Web/README.md): My personal website
+  * [surya web api](https://github.com/amitdole/nakshatra/blob/master/WebApi/README.md): Web Api suite
 
 ## Contribute <a name="contribute"></a>
 - To contribute raise a pull request to this repository or open an issue.
