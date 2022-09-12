@@ -1,4 +1,4 @@
-# Nakshtra
+# Nakshatra
 
 Nakshatra (Sanskrit: नक्षत्र,) is the traditional constellation of stars in the sky as per ancient Indian Astronomy. A nakshatra is one of 27 sectors along the ecliptic. Their names are related to a prominent star or asterisms in or near the respective sectors. This repository is suite of products which I have created for my use to begin with and later to expand for general utility. 
 
