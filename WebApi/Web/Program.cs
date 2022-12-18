@@ -1,4 +1,5 @@
 using Azure.Identity;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Services.Contexts;
 using Services.Repositories;
@@ -10,7 +11,7 @@ builder.Logging.AddConsole();
 
 builder.Configuration.AddAzureKeyVault(
        new Uri($"{builder.Configuration["Keyvault:Uri"]}"),
-       new DefaultAzureCredential());
+       new DefaultAzureCredential(true));
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -25,6 +26,7 @@ builder.Services.AddDbContext<ProfileContext>(options =>
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 var app = builder.Build();
 
