@@ -1,12 +1,12 @@
-name: Build and deploy .NET Core app to Windows WebApp suryaWebApi-test
+name: Build and deploy .NET Core app to Windows WebApp app-surya-test-001
 on:
   push:
     branches:
     - develop
 env:
-  AZURE_WEBAPP_NAME: suryaWebApi-test
+  AZURE_WEBAPP_NAME: app-surya-test-001
   AZURE_WEBAPP_PACKAGE_PATH: WebApi\Web/publish
-  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.suryaWebApi_test_08fe }}
+  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.app_surya_test_001_e278 }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: WebApi\Web
