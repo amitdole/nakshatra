@@ -1,5 +1,4 @@
 using Azure.Identity;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Services.Contexts;
 using Services.Repositories;
@@ -28,11 +27,17 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
+if (environment != Environments.Production)
+{
+    app.UseDeveloperExceptionPage();
+}
 app.UseAuthorization();
 
 app.MapControllers();
