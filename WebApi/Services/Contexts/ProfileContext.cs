@@ -1,5 +1,4 @@
-﻿using Api.Entities;
-using Api.Entities.Profile;
+﻿using Api.Entities.Profile;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 

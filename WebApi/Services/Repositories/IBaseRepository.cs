@@ -1,4 +1,6 @@
-﻿using Api.Entities.Common;
+﻿
+
+using Api.Entities.Common;
 
 namespace Services.Repositories
 {

@@ -1,5 +1,7 @@
+using API.Model.Caching;
 using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
+using Services.CacheService;
 using Services.Contexts;
 using Services.Repositories;
 using Services.Services;
@@ -26,6 +28,21 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+
+builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection("CacheConfiguration"));
+
+builder.Services.AddTransient<RedisCacheService>();
+builder.Services.AddTransient<Func<CacheType, ICacheService>>(serviceProvider => key =>
+{
+    switch (key)
+    {
+        case CacheType.Memory:
+            return serviceProvider.GetService<MemoryCacheService>();
+        default:
+            return serviceProvider.GetService<RedisCacheService>();
+    }
+});
+
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
