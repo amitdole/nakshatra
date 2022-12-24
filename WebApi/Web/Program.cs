@@ -3,6 +3,7 @@ using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services.CacheService;
 using Services.Contexts;
+using Services.Queues;
 using Services.Repositories;
 using Services.Services;
 
@@ -27,6 +28,11 @@ builder.Services.AddDbContext<ProfileContext>(options =>
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
 builder.Services.AddScoped<IProfileService, ProfileService>();
+
+builder.Services.AddScoped<IRemindersQueue, RemindersQueue>();
+
+builder.Services.AddScoped<IReminderService, ReminderService>();
+
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection("CacheConfiguration"));
