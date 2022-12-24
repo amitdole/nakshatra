@@ -19,7 +19,7 @@ namespace Services.Repositories
                 var profile = await this._context.Set<Profile>().FindAsync(keyValues, cancellationToken);
                 return profile;
             }
-            catch (Exception e)
+            catch
             {
                 throw;
             }
@@ -33,7 +33,7 @@ namespace Services.Repositories
                 await this._context.SaveChangesAsync(cancellationToken);
                 return entity;
             }
-            catch (Exception e)
+            catch
             {
                 throw;
             }
@@ -52,7 +52,7 @@ namespace Services.Repositories
                 this._context.Update(entity);
                 await this._context.SaveChangesAsync(cancellationToken);
             }
-            catch (Exception e)
+            catch
             {
                 throw;
             }
@@ -73,7 +73,7 @@ namespace Services.Repositories
 
                 return profiles;
             }
-            catch (Exception e)
+            catch
             {
                 throw;
             }

@@ -84,7 +84,7 @@ namespace AspnetRun.Web.Pages
         {
             var page = 1;
             var blogPages = new Dictionary<int, string>();
-            string? nextPageToken = null;
+            string nextPageToken = null;
 
             //Default page does not have next token
 #pragma warning disable CS8604 // Possible null reference argument.

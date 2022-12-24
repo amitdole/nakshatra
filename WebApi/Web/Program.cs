@@ -13,7 +13,17 @@ builder.Logging.AddConsole();
 
 builder.Configuration.AddAzureKeyVault(
        new Uri($"{builder.Configuration["Keyvault:Uri"]}"),
-       new DefaultAzureCredential(true));
+       new DefaultAzureCredential(options: new DefaultAzureCredentialOptions
+       {
+           ExcludeAzurePowerShellCredential = true,
+           ExcludeEnvironmentCredential = true,
+           ExcludeInteractiveBrowserCredential = true,
+           ExcludeSharedTokenCacheCredential = true,
+           ExcludeVisualStudioCodeCredential = true,
+           ExcludeManagedIdentityCredential = false,
+           ExcludeAzureCliCredential = false,
+           ExcludeVisualStudioCredential = false
+       }));
 
 // Add services to the container.
 builder.Services.AddControllers();

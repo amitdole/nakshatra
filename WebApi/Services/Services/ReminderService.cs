@@ -13,13 +13,13 @@ namespace Services.Services
         }
         public async Task<Reminder> AddReminderAsync(Reminder reminder)
         {
-            var result = _remindersQueue.SendMessageAsync(new ReminderMessage
+            var result = await _remindersQueue.SendMessageAsync(new ReminderMessage
             {
                 Reminder = reminder,
                 Action = "Add"
             });
 
-            return result.Result.Reminder;
+            return result.Reminder;
         }
 
         public Task DeleteReminderAsync(string reminderId)
@@ -29,10 +29,10 @@ namespace Services.Services
 
         public async Task<List<Reminder>> ListAllRemindersAsync()
         {
-            var result = _remindersQueue.ReceiveMessagesAsync();
+            var result = await _remindersQueue.ReceiveMessagesAsync();
             var reminders = new List<Reminder>();
 
-            foreach (var reminderMessage in result.Result)
+            foreach (var reminderMessage in result)
             {
                 reminders.Add(reminderMessage.Reminder);
             }

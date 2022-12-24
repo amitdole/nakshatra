@@ -19,14 +19,11 @@ namespace Services.CacheService
             _connectionMultiplexer = ConnectionMultiplexer.Connect(config["RedisConnectionString"]);
             _cacheConfig = cacheConfig.Value;
 
-            if (_cacheConfig != null)
+            _cacheOptions = new DistributedCacheEntryOptions
             {
-                _cacheOptions = new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_cacheConfig.AbsoluteExpirationInHours),
-                    //SlidingExpiration = TimeSpan.FromMinutes(_cacheConfig.SlidingExpirationInMinutes),
-                };
-            }
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_cacheConfig.AbsoluteExpirationInHours),
+                //SlidingExpiration = TimeSpan.FromMinutes(_cacheConfig.SlidingExpirationInMinutes),
+            };
         }
         public void Remove(string cacheKey)
         {

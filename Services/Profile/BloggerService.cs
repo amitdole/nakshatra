@@ -7,7 +7,7 @@ namespace Services.Profile
     {
         public Posts GetBlogs(BlogInfo blogInfo, string nextPageToken, string searchTerm)
         {
-            Blog? blog = null;
+            Blog blog = null;
             var posts = new Posts();
 
             //Get bloggers data based on the blog url & key
@@ -49,7 +49,7 @@ namespace Services.Profile
                     {
                         posts = JsonConvert.DeserializeObject<Posts>(apiResponse);
                     }
-                    catch (Exception e)
+                    catch
                     {
                         throw;
                     }

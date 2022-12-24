@@ -33,7 +33,7 @@ namespace DataServices
              
             var data = _configuration.Metadata["UserProfiles"];
           
-            ProfileInfo[]? profiles = JsonConvert.DeserializeObject<ProfileInfo[]>(data,
+            var profiles = JsonConvert.DeserializeObject<ProfileInfo[]>(data,
                    new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" });
 
             if (profiles != null && profiles.Any())

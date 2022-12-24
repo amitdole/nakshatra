@@ -24,7 +24,7 @@ namespace EFCoreCosmosSample.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var reminders = _reminderService.ListAllRemindersAsync();
+            var reminders = await _reminderService.ListAllRemindersAsync();
             return Ok(reminders);
         }
 
@@ -38,6 +38,7 @@ namespace EFCoreCosmosSample.Api.Controllers
         [HttpDelete, Route("{reminerId}")]
         public async Task<IActionResult> Delete([FromRoute] string reminerId)
         {
+            var reminders = await _reminderService.ListAllRemindersAsync();
             return Ok();
         }
     }
