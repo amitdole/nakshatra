@@ -1,5 +1,6 @@
 using API.Model.Caching;
 using Azure.Identity;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Services.CacheService;
 using Services.Contexts;
@@ -43,7 +44,10 @@ builder.Services.AddScoped<IRemindersQueue, RemindersQueue>();
 
 builder.Services.AddScoped<IReminderService, ReminderService>();
 
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
+{
+    ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]
+});
 
 builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection("CacheConfiguration"));
 
