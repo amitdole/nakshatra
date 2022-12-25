@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace Web
@@ -14,11 +15,23 @@ namespace Web
             .ConfigureAppConfiguration((context, config) =>
             {
                 var root = config.Build();
-                config.AddAzureKeyVault($"{root["Keyvault:Uri"]}");
+
+                config.AddAzureKeyVault(new Uri($"{root["Keyvault:Uri"]}"),
+       new DefaultAzureCredential(options: new DefaultAzureCredentialOptions
+       {
+           ExcludeAzurePowerShellCredential = true,
+           ExcludeEnvironmentCredential = true,
+           ExcludeInteractiveBrowserCredential = true,
+           ExcludeSharedTokenCacheCredential = true,
+           ExcludeVisualStudioCodeCredential = true,
+           ExcludeManagedIdentityCredential = false,
+           ExcludeAzureCliCredential = false,
+           ExcludeVisualStudioCredential = false
+       }));
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
             });
     }
-}   
+}

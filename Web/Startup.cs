@@ -54,6 +54,7 @@ public class Startup
         {
             opt.Metadata = configDictonary;
         });
+
         services.Configure(configuration);
         services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<Configuration>>().Value);
     }
