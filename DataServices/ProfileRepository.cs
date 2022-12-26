@@ -22,23 +22,11 @@ namespace DataServices
             var profile = new ProfileInfo();
             using (var httpClient = new HttpClient())
             {
-                //IHostingEnvironment env;
-                //var t = HostingEnvironmentExtensions.IsDevelopment(env);
                 using (var response = httpClient.GetAsync($"{_appSettings["SuryaWebApi:Endpoint"]}/api/profile/{_appSettings["Profile:Id"]}"))
                 {
                     string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
                     profile = JsonConvert.DeserializeObject<ProfileInfo>(apiResponse);
                 }
-            }
-             
-            var data = _configuration.Metadata["UserProfiles"];
-          
-            var profiles = JsonConvert.DeserializeObject<ProfileInfo[]>(data,
-                   new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" });
-
-            if (profiles != null && profiles.Any())
-            {
-                profile = profiles.Where(p => p.Id == profileId).FirstOrDefault();
             }
             return profile;
         }
