@@ -1,24 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>Nakshatra.HostedServices.WebApi.Tests</AssemblyName>
-    <RootNamespace>Nakshatra.HostedServices.WebApi.Tests</RootNamespace>
+    <AssemblyName>Nakshatra.HostedServices.Services.Tests</AssemblyName>
+    <RootNamespace>Nakshatra.HostedServices.Services.Tests</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="appsettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.10.0" />
@@ -37,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebApi\Web\Web.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

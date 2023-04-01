@@ -41,10 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core.Services\Services.csproj" />
-    <ProjectReference Include="..\..\Core\Core.Api\Api.csproj" />
-    <ProjectReference Include="..\..\DataServices\DataServices.csproj" />
-    <ProjectReference Include="..\..\Services\Services.csproj" />
+    <ProjectReference Include="..\..\..\Core\Api\Api.csproj" />
+    <ProjectReference Include="..\..\..\Core\Services\Services.csproj" />
+    <ProjectReference Include="..\..\..\Services\DataServices\DataServices.csproj" />
     <ProjectReference Include="..\Api\Api.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>

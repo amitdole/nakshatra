@@ -33,10 +33,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Api\Api.csproj" />
-    <ProjectReference Include="..\Core.Services\Services.csproj" />
-    <ProjectReference Include="..\DataServices\DataServices.csproj" />
-    <ProjectReference Include="..\Services\Services.csproj" />
+    <ProjectReference Include="..\..\Core\Api\Api.csproj" />
+    <ProjectReference Include="..\..\Core\Services\Services.csproj" />
+    <ProjectReference Include="..\..\HostedServices\WebApi\Api\Api.csproj" />
+    <ProjectReference Include="..\..\HostedServices\WebApi\Web\Web.csproj" />
+    <ProjectReference Include="..\..\Services\Api\Api.csproj" />
+    <ProjectReference Include="..\..\Services\DataServices\DataServices.csproj" />
+    <ProjectReference Include="..\..\Services\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>
