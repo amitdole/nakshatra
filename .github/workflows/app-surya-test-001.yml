@@ -5,11 +5,11 @@ on:
     - develop
 env:
   AZURE_WEBAPP_NAME: app-surya-test-001
-  AZURE_WEBAPP_PACKAGE_PATH: WebApi\Web/publish
+  AZURE_WEBAPP_PACKAGE_PATH: HostedServices\WebApi\Web/publish
   AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.app_surya_test_001_e278 }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
-  WORKING_DIRECTORY: WebApi\Web
+  WORKING_DIRECTORY: HostedServices\WebApi\Web
 jobs:
   build-and-deploy:
     runs-on: windows-latest
