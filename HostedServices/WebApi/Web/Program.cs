@@ -1,5 +1,4 @@
 using Azure.Identity;
-using DataServices;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Nakshatra.Core.Api.Model.Caching;
@@ -51,6 +50,8 @@ builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceO
 });
 
 builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection("CacheConfiguration"));
+
+builder.Services.AddMemoryCache();
 
 if (builder.Configuration["CacheProvider"].Equals("memory", StringComparison.InvariantCultureIgnoreCase))
 {
