@@ -3,7 +3,7 @@
     public class TwitterController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] int i)
+        public IActionResult Add([FromBody] int i)
         {
             return  Ok();
         }

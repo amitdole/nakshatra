@@ -1,7 +1,6 @@
 using Azure.Identity;
-using Microsoft.Extensions.Configuration;
 
-namespace Web
+namespace PersonalWebsite.Web
 {
     public class Program
     {

@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
-      run: dotnet test $TEST_WORKING_DIRECTORY --configuration $BUILD_CONFIG --logger "trx;LogFileName=test-results.trx" || true
+      run: dotnet test "${{ env.TEST_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --logger "trx;LogFileName=test-results.trx" || true
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: always()
