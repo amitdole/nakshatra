@@ -8,7 +8,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: Web/publish
   AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.amitdole_test_001_b482 }}
   CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 7.0.x
+  DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: Web
 jobs:
   build-and-deploy:
