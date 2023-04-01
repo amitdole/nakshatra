@@ -11,7 +11,7 @@ namespace Nakshatra.WebApi.HostedServices.Tests;
 public class WebApi_Profile : IClassFixture<TestBase>
 {
     private ServiceProvider _serviceProvider;
-    private ProfileController _profileController;
+    private ProfileController? _profileController;
 
     public WebApi_Profile(TestBase testBase)
     {
@@ -28,7 +28,7 @@ public class WebApi_Profile : IClassFixture<TestBase>
 
         //Act
 
-        var response = _profileController.List().Result;
+        var response = _profileController?.List().Result;
 
         //Assert
 
@@ -50,7 +50,7 @@ public class WebApi_Profile : IClassFixture<TestBase>
 
         //Act
 
-        var response = _profileController.Get(expectedProfileId).Result;
+        var response = _profileController?.Get(expectedProfileId).Result;
 
         //Assert
 

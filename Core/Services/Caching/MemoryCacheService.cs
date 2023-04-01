@@ -7,13 +7,14 @@ namespace Nakshatra.Core.Services.Caching;
 public class MemoryCacheService : ICacheService
 {
     private readonly IMemoryCache _memoryCache;
-    private readonly CacheConfiguration _cacheConfig;
-    private MemoryCacheEntryOptions _cacheOptions;
+    private readonly CacheConfiguration? _cacheConfig;
+    private MemoryCacheEntryOptions? _cacheOptions;
 
     public MemoryCacheService(IMemoryCache memoryCache, IOptions<CacheConfiguration> cacheConfig)
     {
         _memoryCache = memoryCache;
         _cacheConfig = cacheConfig.Value;
+
         if (_cacheConfig != null)
         {
             _cacheOptions = new MemoryCacheEntryOptions
@@ -34,7 +35,7 @@ public class MemoryCacheService : ICacheService
         return _memoryCache.Set(cacheKey, value, _cacheOptions);
     }
 
-    public bool TryGet<T>(string cacheKey, out T value)
+    public bool TryGet<T>(string cacheKey, out T? value)
     {
         _memoryCache.TryGetValue(cacheKey, out value);
         if (value == null) return false;

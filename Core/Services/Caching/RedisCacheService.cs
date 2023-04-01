@@ -9,13 +9,19 @@ namespace Nakshatra.Core.Services.Caching;
 
 public class RedisCacheService : ICacheService
 {
-    private readonly ConnectionMultiplexer _connectionMultiplexer;
+    private readonly ConnectionMultiplexer? _connectionMultiplexer;
     private readonly CacheConfiguration _cacheConfig;
     private DistributedCacheEntryOptions _cacheOptions;
 
     public RedisCacheService(IOptions<CacheConfiguration> cacheConfig, IConfiguration config)
     {
-        _connectionMultiplexer = ConnectionMultiplexer.Connect(config["RedisConnectionString"]);
+        var redisConnectionString = config["RedisConnectionString"];
+
+        if (!string.IsNullOrEmpty(redisConnectionString))
+        {
+            _connectionMultiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
+        }
+
         _cacheConfig = cacheConfig.Value;
 
         _cacheOptions = new DistributedCacheEntryOptions
@@ -26,33 +32,33 @@ public class RedisCacheService : ICacheService
     }
     public void Remove(string cacheKey)
     {
-        var database = _connectionMultiplexer.GetDatabase();
-        database.KeyDelete(cacheKey);
+        var database = _connectionMultiplexer?.GetDatabase();
+        database?.KeyDelete(cacheKey);
     }
 
     public T Set<T>(string cacheKey, T value)
     {
-        var database = _connectionMultiplexer.GetDatabase();
+        var database = _connectionMultiplexer?.GetDatabase();
 
         var data = JsonConvert.SerializeObject(value);
 
-        database.StringSet(cacheKey, data ?? "", _cacheOptions.AbsoluteExpirationRelativeToNow);
-        return default;
+        database?.StringSet(cacheKey, data ?? "", _cacheOptions.AbsoluteExpirationRelativeToNow);
+        return value;
     }
 
     public bool TryGet<T>(string cacheKey, out T value)
     {
-        var database = _connectionMultiplexer.GetDatabase();
+        var database = _connectionMultiplexer?.GetDatabase();
 
-        var data = database.StringGet(cacheKey);
+        var data = database?.StringGet(cacheKey);
 
         if (!string.IsNullOrEmpty(data))
         {
-            var jsonString = database.StringGet(cacheKey);
-            value = JsonConvert.DeserializeObject<T>(jsonString);
+            var jsonString = database?.StringGet(cacheKey);
+            value = JsonConvert.DeserializeObject<T>(jsonString!)!;
             return true;
         }
-        value = default;
+        value = default!;
         return false;
     }
 }
