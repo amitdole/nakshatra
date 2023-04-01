@@ -5,11 +5,12 @@ on:
     - develop
 env:
   AZURE_WEBAPP_NAME: app-surya-test-001
-  AZURE_WEBAPP_PACKAGE_PATH: WebApi\Web/publish
+  AZURE_WEBAPP_PACKAGE_PATH: HostedServices\WebApi\Web/publish
   AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.app_surya_test_001_e278 }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
   WORKING_DIRECTORY: HostedServices\WebApi\Web
+  TEST_WORKING_DIRECTORY: HostedServices\WebApi\WebApi.Tests
 jobs:
   build-and-deploy:
     runs-on: windows-latest
@@ -24,7 +25,15 @@ jobs:
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
+      run: dotnet test $TEST_WORKING_DIRECTORY --configuration $BUILD_CONFIG --logger "trx;LogFileName=test-results.trx" || true
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: DotNET Tests
+        path: "**/test-results.trx"                            
+        reporter: dotnet-trx
+        fail-on-error: true
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
     - name: Deploy to Azure WebApp
