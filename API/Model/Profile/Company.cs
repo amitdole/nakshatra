@@ -1,10 +1,9 @@
-﻿namespace API.Model.Profile
+﻿namespace Nakshatra.Api.Model.Profile;
+
+[Serializable]
+public class Company
 {
-    [Serializable]
-    public class Company
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int AddressId { get; set; }
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int AddressId { get; set; }
 }

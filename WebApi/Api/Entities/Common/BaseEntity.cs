@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Api.Entities.Common
+namespace Nakshatra.HostedServices.WebApi.Api.Entities.Common;
+
+public record BaseEntity
 {
-    public record BaseEntity
-    {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-    }
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
 }

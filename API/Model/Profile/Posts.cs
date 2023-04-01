@@ -1,10 +1,9 @@
-﻿namespace API.Model.Profile
+﻿namespace Nakshatra.Api.Model.Profile;
+
+[Serializable]
+public class Post
 {
-    [Serializable]
-    public class Posts
-    {
-        public string NextPageToken { get; set; }
-        public int TotalItems { get; set; }
-        public PostDetails[] Items { get; set; }
-    }
+    public string NextPageToken { get; set; }
+    public int TotalItems { get; set; }
+    public PostDetails[] Items { get; set; }
 }

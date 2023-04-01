@@ -1,8 +1,7 @@
-﻿using Api.Entities.Profile;
+﻿using Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
 
-namespace Services.Repositories
+namespace Nakshatra.HostedServices.Services.Repositories;
+
+public interface IProfileRepository : IBaseRepository<Profile>
 {
-    public interface IProfileRepository : IBaseRepository<Profile>
-    {
-    }
 }

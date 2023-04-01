@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Web.Models;
-using Services.Profile;
-using API.Model.Service;
-using API.Model.Profile;
-using API.Model.Caching;
-using Services.CacheService;
 using Services.Extensions;
+using Services.Blogger;
+using Nakshatra.Api.Model.Service;
+using Nakshatra.Core.Services.Caching;
+using Nakshatra.Api.Model.Profile;
 
 namespace AspnetRun.Web.Pages
 {
@@ -14,29 +13,28 @@ namespace AspnetRun.Web.Pages
     {
         private readonly ILogger<BlogModel> _logger;
         private readonly IConfiguration _configuration;
-        private IProfileService _profileService;
-        private readonly Func<CacheType, ICacheService> _cacheService;
+        private IUserProfileService _userProfileService;
+        private readonly ICacheService _cacheService;
 
         [BindProperty]
-        public Posts Posts { get; set; }
+        public Post Posts { get; set; }
 
-        public BlogModel(ILogger<BlogModel> logger, IConfiguration configuration, IProfileService profileService, Func<CacheType, ICacheService> cacheService)
+        public BlogModel(ILogger<BlogModel> logger, IConfiguration configuration, IUserProfileService userProfileService, ICacheService cacheService)
         {
             _logger = logger;
             _configuration = configuration;
-            _profileService = profileService;
+            _userProfileService = userProfileService;
             _cacheService = cacheService;
         }
 
         public IActionResult OnGet(int? blog_page, string search)
         {
             var userProfileCacheKey = $"user_profile";
-            var cacheProvider = _configuration["CacheProvider"].ToEnum<CacheType>();
-
-            if (!_cacheService(cacheProvider).TryGet(userProfileCacheKey, out ProfileInfo profile))
+            
+            if (!_cacheService.TryGet(userProfileCacheKey, out UserProfileInfo profile))
             {
-                profile = _profileService.GetProfile(int.Parse(_configuration["Profile:Id"]));
-                _cacheService(cacheProvider).Set(userProfileCacheKey, profile);
+                profile = _userProfileService.GetUserProfile(int.Parse(_configuration["Profile:Id"]));
+                _cacheService.Set(userProfileCacheKey, profile);
             }
 
             //var profile = _profileService.GetProfile(10001);
@@ -52,20 +50,20 @@ namespace AspnetRun.Web.Pages
 
             var bloggerPaginationCacheKey = $"dotnetkari_blogger_pagination";
 
-            if (!_cacheService(cacheProvider).TryGet(bloggerPaginationCacheKey, out Dictionary<int, string> blogPages))
+            if (!_cacheService.TryGet(bloggerPaginationCacheKey, out Dictionary<int, string> blogPages))
             {
                 //Build Pagination
                 blogPages = BuildBloggerPagger(_bloggerService, search, blogInfo);
-                _cacheService(cacheProvider).Set(bloggerPaginationCacheKey, blogPages);
+                _cacheService.Set(bloggerPaginationCacheKey, blogPages);
             }
 
             var bloggerPostsCacheKey = $"dotnetkari_blogger_posts";
 
-            if (!_cacheService(cacheProvider).TryGet(bloggerPostsCacheKey, out Posts posts))
+            if (!_cacheService.TryGet(bloggerPostsCacheKey, out Post posts))
             {
                 //Build Pagination
                 posts = _bloggerService.GetBlogs(blogInfo, blogPages[page ?? 1], search);
-                _cacheService(cacheProvider).Set(bloggerPostsCacheKey, blogPages);
+                _cacheService.Set(bloggerPostsCacheKey, blogPages);
             }
 
             Posts = posts;

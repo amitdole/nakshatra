@@ -1,32 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Nakshatra.Api.Model.Profile;
+using Nakshatra.Api.Model.Service;
+using System.Configuration;
 using Web.Models;
-using Services.Profile;
-using API.Model.Service;
-using API.Model.Profile;
 
 namespace AspnetRun.Web.Pages
 {
     public class ContactModel : PageModel
     {
         private readonly ILogger<AboutModel> _logger;
-        private IProfileService _profileService;
-        private readonly Configuration _config;
+        private IUserProfileService _userProfileService;
+        private readonly IConfiguration _config;
       
 
         [BindProperty]
-        public ProfileInfo Profile { get; set; }
+        public UserProfileInfo Profile { get; set; }
 
-        public ContactModel(ILogger<AboutModel> logger, IProfileService profileService, Configuration config)
+        public ContactModel(ILogger<AboutModel> logger, IUserProfileService userProfileService, IConfiguration config)
         {
             _config = config;
             _logger = logger;
-            _profileService = profileService;
+            _userProfileService = userProfileService;
         }
 
         public IActionResult OnGet()
         {
-            var profile = _profileService.GetProfile(10001);
+            var profile = _userProfileService.GetUserProfile(10001);
 
             Profile = profile;
 
@@ -35,10 +35,10 @@ namespace AspnetRun.Web.Pages
 
         public void OnPost(Contact contact)
         {
-            var profile = _profileService.GetProfile(10001);
+            var profile = _userProfileService.GetUserProfile(10001);
 
-            var emailService = new EmailService(_config);
-            var response = emailService.Send(new EmailInfo
+            var emailService = new Nakshatra.Services.Profile.EmailService(_config);
+            var response = emailService.Send(new Nakshatra.Core.Api.Model.Email.EmailInfo
             {
                 Sender = contact.Email,
                 Receiver = profile.PersonalDetails.Email,

@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using API.Model.Service;
-using API.Model.Profile;
+using Nakshatra.Api.Model.Profile;
 
 namespace AspnetRun.Web.Pages
 {
     public class _ContactModel : PageModel
     {
         [BindProperty]
-        public ProfileInfo Profile { get; set; }
+        public UserProfileInfo UserProfile { get; set; }
 
         public _ContactModel()
         {
@@ -20,9 +19,9 @@ namespace AspnetRun.Web.Pages
             return Page();
         }
 
-        public IActionResult OnGet(ProfileInfo profile)
+        public IActionResult OnGet(UserProfileInfo userProfile)
         {
-            Profile = profile;
+            UserProfile = userProfile;
 
             return Page();
         }

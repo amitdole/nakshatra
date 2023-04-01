@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <AssemblyName>Nakshatra.Services.Api</AssemblyName>
+    <RootNamespace>Nakshatra.Services.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

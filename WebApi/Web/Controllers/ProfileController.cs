@@ -1,82 +1,71 @@
-﻿using Api.Entities.Profile;
-using API.Model.Caching;
-using Microsoft.AspNetCore.Mvc;
-using Services.CacheService;
-using Services.Extensions;
-using Services.Services;
+﻿using Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
+using Nakshatra.Core.Services.Caching;
+using Nakshatra.HostedServices.Services.Services;
 
-namespace EFCoreCosmosSample.Api.Controllers
+namespace Nakshatra.HostedServices.WebApi.Web.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProfileController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProfileController : ControllerBase
+    private readonly IProfileService _profileService;
+    private readonly ICacheService _cacheService;
+    private const string userProfilesCacheKey = $"user_profile";
+    private const string userProfileCacheKey = "user_profile_{0}";
+
+    public ProfileController(IProfileService profileService, ICacheService cacheService)
     {
-        private readonly IProfileService _profileService;
-        private readonly Func<CacheType, ICacheService> _cacheService;
-        private readonly CacheType _cacheProvider;
-        private readonly IConfiguration _config;
-        private const string userProfilesCacheKey = $"user_profile";
-        private const string userProfileCacheKey = "user_profile_{0}";
+        _profileService = profileService;
+        _cacheService = cacheService;
+    }
 
-        public ProfileController(IProfileService profileService, Func<CacheType, ICacheService> cacheService, IConfiguration config)
+    [HttpGet]
+    public async Task<IActionResult> List()
+    {
+        if (!_cacheService.TryGet(userProfilesCacheKey, out IReadOnlyList<Profile> profiles))
         {
-            _profileService = profileService;
-            _cacheService = cacheService;
-            _config = config;
-
-            _cacheProvider = _config["CacheProvider"].ToEnum<CacheType>();
+            profiles = await _profileService.ListAllProfiles();
+            _cacheService.Set(userProfilesCacheKey, profiles);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> List()
+        return Ok(profiles);
+    }
+
+    [HttpGet, Route("{profileId}")]
+    public async Task<IActionResult> Get([FromRoute] int profileId)
+    {
+        if (!_cacheService.TryGet(string.Format(userProfileCacheKey, profileId), out Profile profile))
         {
-
-
-            if (!_cacheService(_cacheProvider).TryGet(userProfilesCacheKey, out IReadOnlyList<Profile> profiles))
-            {
-                profiles = await this._profileService.ListAllProfiles();
-                _cacheService(_cacheProvider).Set(userProfilesCacheKey, profiles);
-            }
-
-            return Ok(profiles);
+            profile = await _profileService.GetProfile(profileId);
+            _cacheService.Set(string.Format(userProfileCacheKey, profileId), profile);
         }
 
-        [HttpGet, Route("{profileId}")]
-        public async Task<IActionResult> Get([FromRoute] string profileId)
-        {
-            if (!_cacheService(_cacheProvider).TryGet(string.Format(userProfileCacheKey, profileId), out Profile profile))
-            {
-                profile = await this._profileService.GetProfile(profileId);
-                _cacheService(_cacheProvider).Set(string.Format(userProfileCacheKey, profileId), profile);
-            }
+        return Ok(profile);
+    }
 
-            return Ok(profile);
-        }
+    [HttpPost]
+    public async Task<IActionResult> Add([FromBody] Profile profile)
+    {
+        var savedProfile = await _profileService.AddProfile(profile);
+        _cacheService.Set(string.Format(userProfileCacheKey, profile.Id), profile);
+        return Ok(savedProfile);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] Profile profile)
-        {
-            var savedProfile = await this._profileService.AddProfile(profile);
-            _cacheService(_cacheProvider).Set(string.Format(userProfileCacheKey, profile.Id), profile);
-            return Ok(savedProfile);
-        }
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] Profile profile)
+    {
+        await _profileService.UpdateProfile(profile);
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Profile profile)
-        {
-            await this._profileService.UpdateProfile(profile);
+        _cacheService.Set(string.Format(userProfileCacheKey, profile.Id), profile);
 
-            _cacheService(_cacheProvider).Set(string.Format(userProfileCacheKey, profile.Id), profile);
+        return Ok();
+    }
 
-            return Ok();
-        }
+    [HttpDelete, Route("{profileId}")]
+    public async Task<IActionResult> Delete([FromRoute] int profileId)
+    {
+        await _profileService.DeleteProfile(profileId);
 
-        [HttpDelete, Route("{profileId}")]
-        public async Task<IActionResult> Delete([FromRoute] string profileId)
-        {
-            await this._profileService.DeleteProfile(profileId);
-
-            return Ok();
-        }
+        return Ok();
     }
 }

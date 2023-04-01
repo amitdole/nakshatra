@@ -1,13 +1,9 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Api.Entities.Profile
+﻿namespace Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
+public record Skill
 {
-    public record Skill
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Technology { get; set; }
-        public string Description { get; set; }
-        public int Proficency { get; set; }
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Technology { get; set; }
+    public string Description { get; set; }
+    public int Proficency { get; set; }
 }

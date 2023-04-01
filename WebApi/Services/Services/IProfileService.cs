@@ -1,13 +1,12 @@
-﻿using Api.Entities.Profile;
+﻿using Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
 
-namespace Services.Services
+namespace Nakshatra.HostedServices.Services.Services;
+
+public interface IProfileService
 {
-    public interface IProfileService
-    {
-        Task<Profile> GetProfile(string familyId);
-        Task<Profile> AddProfile(Profile profile);
-        Task<IReadOnlyList<Profile>> ListAllProfiles();
-        Task DeleteProfile(string profileId);
-        Task UpdateProfile(Profile profile);
-    }
+    Task<Profile> GetProfile(int profileId);
+    Task<Profile> AddProfile(Profile profile);
+    Task<IReadOnlyList<Profile>> ListAllProfiles();
+    Task DeleteProfile(int profileId);
+    Task UpdateProfile(Profile profile);
 }

@@ -1,82 +1,78 @@
-﻿using Api.Entities.Profile;
-using Microsoft.EntityFrameworkCore;
-using Services.Contexts;
-using System.Diagnostics;
+﻿using Nakshatra.HostedServices.Services.Contexts;
+using Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
 
-namespace Services.Repositories
+namespace Nakshatra.HostedServices.Services.Repositories;
+public class ProfileRepository : IProfileRepository
 {
-    public class ProfileRepository : IProfileRepository
+    private readonly ProfileContext _context;
+
+    public ProfileRepository(ProfileContext profileContext) => _context = profileContext;
+
+    public async Task<Profile> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        private readonly ProfileContext _context;
-
-        public ProfileRepository(ProfileContext profileContext) => _context = profileContext;
-
-        public async Task<Profile> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+        try
         {
-            try
-            {
-                var keyValues = new object[] { int.Parse(id) };
-                var profile = await this._context.Set<Profile>().FindAsync(keyValues, cancellationToken);
-                return profile;
-            }
-            catch
-            {
-                throw;
-            }
+            var keyValues = new object[] { id };
+            var profile = await _context.Set<Profile>().FindAsync(keyValues, cancellationToken);
+            return profile;
         }
-        public async Task<Profile> AddAsync(Profile entity, CancellationToken cancellationToken = default)
+        catch
         {
-            try
-            {
-                await this._context.AddAsync(entity);
-
-                await this._context.SaveChangesAsync(cancellationToken);
-                return entity;
-            }
-            catch
-            {
-                throw;
-            }
+            throw;
         }
-
-        public async Task DeleteAsync(Profile entity, CancellationToken cancellationToken = default)
+    }
+    public async Task<Profile> AddAsync(Profile entity, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            this._context.Remove(entity);
-            await this._context.SaveChangesAsync(cancellationToken);
+            await this._context.AddAsync(entity);
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
-
-        public async Task UpdateAsync(Profile entity, CancellationToken cancellationToken = default)
+        catch
         {
-            try
-            {
-                this._context.Update(entity);
-                await this._context.SaveChangesAsync(cancellationToken);
-            }
-            catch
-            {
-                throw;
-            }
+            throw;
         }
+    }
 
-        public async Task<IReadOnlyList<Profile>> ListAllAsync(CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Profile entity, CancellationToken cancellationToken = default)
+    {
+        _context.Remove(entity);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateAsync(Profile entity, CancellationToken cancellationToken = default)
+    {
+        try
         {
-            try
-            {
-                Stopwatch stopwatch = new();
-                stopwatch.Start();
+            _context.Update(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch
+        {
+            throw;
+        }
+    }
 
-                var profiles = await this._context.Profiles.ToListAsync();
+    public async Task<IReadOnlyList<Profile>> ListAllAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
 
-                stopwatch.Stop();
+            var profiles = await _context.Profiles.ToListAsync();
 
-                TimeSpan ts = stopwatch.Elapsed;
+            stopwatch.Stop();
 
-                return profiles;
-            }
-            catch
-            {
-                throw;
-            }
+            TimeSpan ts = stopwatch.Elapsed;
+
+            return profiles;
+        }
+        catch
+        {
+            throw;
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace API.Model.Profile
+﻿namespace Nakshatra.Api.Model.Profile;
+
+[Serializable]
+public class Experience
 {
-    [Serializable]
-    public class Experience
-    {
-        public int Id { get; set; }
-        public string Role { get; set; }
-        public int CompanyId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-    }
+    public int Id { get; set; }
+    public string Role { get; set; }
+    public int CompanyId { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
 }

@@ -1,11 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
 
-namespace Api.Entities.Profile
+public record Company
 {
-    public record Company
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int AddressId { get; set; }
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int AddressId { get; set; }
 }

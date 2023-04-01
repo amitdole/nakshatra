@@ -1,9 +1,8 @@
-﻿namespace API.Model.Profile
+﻿namespace Nakshatra.Api.Model.Profile;
+
+[Serializable]
+public class Author
 {
-    [Serializable]
-    public class Author
-    {
-        public string DisplayName { get; set; }
-        public string Url { get; set; }
-    }
+    public string DisplayName { get; set; }
+    public string Url { get; set; }
 }

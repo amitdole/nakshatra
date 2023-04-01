@@ -1,4 +1,4 @@
-﻿namespace API.Model.Profile
+﻿namespace Nakshatra.Api.Model.Profile
 {
     [Serializable]
     public class WorkFlow

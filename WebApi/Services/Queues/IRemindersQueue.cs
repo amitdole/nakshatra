@@ -1,13 +1,7 @@
-﻿using Api.Entities.Reminders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nakshatra.HostedServices.WebApi.Api.Entities.Reminders;
 
-namespace Services.Queues
+namespace Nakshatra.HostedServices.Services.Queues;
+
+public interface IRemindersQueue: IBaseQueue<ReminderMessage>
 {
-    public interface IRemindersQueue: IBaseQueue<ReminderMessage>
-    {
-    }
 }

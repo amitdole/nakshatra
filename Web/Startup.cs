@@ -1,19 +1,18 @@
-﻿using API.Repositories;
-using DataServices;
+﻿using DataServices;
 using Microsoft.ApplicationInsights.AspNetCore;
 using Microsoft.Extensions.Options;
-using API.Model.Caching;
-using Services.CacheService;
 using Services.Profile;
-using API.Model.Service;
-using API.Model.Profile;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web.UI;
-using Microsoft.EntityFrameworkCore;
-using Web.Models;
+using Nakshatra.Api.Repositories;
+using Nakshatra.Api.Model.Service;
+using Nakshatra.Core.Api.Model.Caching;
+using Nakshatra.Core.Services.Caching;
+using System.Configuration;
+using Nakshatra.Api.Model.Profile;
 
 public class Startup
 {
@@ -57,8 +56,8 @@ public class Startup
         // Add 'JavaScriptSnippet' "Service" for backwards compatibility. To remove in favour of 'IJavaScriptSnippet'. 
         services.AddSingleton<JavaScriptSnippet>();
 
-        services.AddScoped<IProfileRepository, ProfileRepository>();
-        services.AddScoped<IProfileService, ProfileService>();
+        services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+        services.AddScoped<IUserProfileService, UserProfileService>();
 
         services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
 
@@ -79,7 +78,7 @@ public class Startup
         configDictonary.Add("UserProfiles", Configuration["UserProfiles"]);
         configDictonary.Add("SendGridAPISecretKey", Configuration["SendGridAPISecretKey"]);
 
-        Action<Configuration> configuration = (opt =>
+        Action<ExtendedAttributes> configuration = (opt =>
         {
             opt.Metadata = configDictonary;
         });

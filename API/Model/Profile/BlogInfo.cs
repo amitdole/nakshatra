@@ -1,11 +1,10 @@
-﻿namespace API.Model.Profile
+﻿namespace Nakshatra.Api.Model.Profile;
+
+[Serializable]
+public class BlogInfo
 {
-    [Serializable]
-    public class BlogInfo
-    {
-        public string Name { get; set; }
-        public string Api { get; set; }
-        public string Url { get; set; }
-        public string Key { get; set; }
-    }
+    public string Name { get; set; }
+    public string Api { get; set; }
+    public string Url { get; set; }
+    public string Key { get; set; }
 }

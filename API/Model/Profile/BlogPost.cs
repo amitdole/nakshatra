@@ -1,9 +1,8 @@
-﻿namespace API.Model.Profile
+﻿namespace Nakshatra.Api.Model.Profile;
+
+[Serializable]
+public class BlogPost
 {
-    [Serializable]
-    public class BlogPost
-    {
-        public int TotalItems { get; set; }
-        public string SelfLink { get; set; }
-    }
+    public int TotalItems { get; set; }
+    public string SelfLink { get; set; }
 }

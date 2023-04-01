@@ -1,5 +1,5 @@
 ﻿@page
-@using API.Model
+@using Nakshatra.Api.Model
 @using Web.Pages
 @inject IConfiguration _config;
 
@@ -8,4 +8,4 @@
     ViewData["Title"] = "About page";
 }
 
-<partial name="_About" model="@Model.Profile"/>
+<partial name="_About" model="@Model.UserProfile"/>

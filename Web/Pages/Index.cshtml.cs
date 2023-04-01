@@ -1,10 +1,9 @@
-﻿using API.Model.Caching;
-using API.Model.Profile;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services.CacheService;
-using Services.Extensions;
-using API.Model.Service;
+using Nakshatra.Api.Model.Profile;
+using Nakshatra.Api.Model.Service;
+using Nakshatra.Core.Services.Caching;
+using Services.Profile;
 
 namespace Web.Pages
 {
@@ -12,31 +11,30 @@ namespace Web.Pages
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<IndexModel> _logger;
-        private IProfileService _profileService;
-        private readonly Func<CacheType, ICacheService> _cacheService;
+        private IUserProfileService _userProfileService;
+        private readonly ICacheService _cacheService;
 
         [BindProperty]
-        public ProfileInfo Profile { get; set; }
-        public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration, IProfileService profileService, Func<CacheType, ICacheService> cacheService)
+        public UserProfileInfo UserProfile { get; set; }
+        public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration, IUserProfileService userProfileService, ICacheService cacheService)
         {
             _logger = logger;
             _configuration = configuration;
-            _profileService = profileService;
+            _userProfileService = userProfileService;
             _cacheService = cacheService;
         }
 
         public IActionResult OnGet()
         {
             var cacheKey = $"user_profile";
-            var cacheProvider = _configuration["CacheProvider"].ToEnum<CacheType>();
 
-            if (!_cacheService(cacheProvider).TryGet(cacheKey, out ProfileInfo profile))
+            if (!_cacheService.TryGet(cacheKey, out UserProfileInfo userProfile))
             {
-                profile = _profileService.GetProfile(int.Parse(_configuration["Profile:Id"]));
-                _cacheService(cacheProvider).Set(cacheKey, profile);
+                userProfile = _userProfileService.GetUserProfile(int.Parse(_configuration["Profile:Id"]));
+                _cacheService.Set(cacheKey, userProfile);
             }
 
-            Profile = profile;
+            UserProfile = userProfile;
 
             return Page();
         }

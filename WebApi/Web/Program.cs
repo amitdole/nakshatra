@@ -1,12 +1,13 @@
-using API.Model.Caching;
 using Azure.Identity;
+using DataServices;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Services.CacheService;
-using Services.Contexts;
-using Services.Queues;
-using Services.Repositories;
-using Services.Services;
+using Nakshatra.Core.Api.Model.Caching;
+using Nakshatra.Core.Services.Caching;
+using Nakshatra.HostedServices.Services.Contexts;
+using Nakshatra.HostedServices.Services.Queues;
+using Nakshatra.HostedServices.Services.Repositories;
+using Nakshatra.HostedServices.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
@@ -51,17 +52,24 @@ builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceO
 
 builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection("CacheConfiguration"));
 
-builder.Services.AddTransient<RedisCacheService>();
-builder.Services.AddTransient<Func<CacheType, ICacheService>>(serviceProvider => key =>
+if (builder.Configuration["CacheProvider"].Equals("memory", StringComparison.InvariantCultureIgnoreCase))
 {
-    switch (key)
-    {
-        case CacheType.Memory:
-            return serviceProvider.GetService<MemoryCacheService>();
-        default:
-            return serviceProvider.GetService<RedisCacheService>();
-    }
-});
+    builder.Services.AddTransient<ICacheService, MemoryCacheService>();
+}
+else
+{
+    builder.Services.AddTransient<ICacheService, RedisCacheService>();
+}
+//builder.Services.AddTransient<Func<CacheType, ICacheService>>(serviceProvider => key =>
+//{
+//    switch (key)
+//    {
+//        case CacheType.Memory:
+//            return serviceProvider.GetService<MemoryCacheService>();
+//        default:
+//            return serviceProvider.GetService<RedisCacheService>();
+//    }
+//});
 
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

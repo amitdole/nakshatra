@@ -1,11 +1,10 @@
-﻿using Api.Entities.Reminders;
+﻿using Nakshatra.HostedServices.WebApi.Api.Entities.Reminders;
 
-namespace Services.Services
+namespace Nakshatra.HostedServices.Services.Services;
+
+public interface IReminderService
 {
-    public interface IReminderService
-    {
-        Task<Reminder> AddReminderAsync(Reminder reminder);
-        Task<List<Reminder>> ListAllRemindersAsync();
-        Task DeleteReminderAsync(string reminderId);
-    }
+    Task<Reminder> AddReminderAsync(Reminder reminder);
+    Task<List<Reminder>> ListAllRemindersAsync();
+    Task DeleteReminderAsync(string reminderId);
 }
