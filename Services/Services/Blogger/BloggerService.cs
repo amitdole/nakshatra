@@ -1,61 +1,86 @@
-﻿using Nakshatra.Api.Model.Profile;
+﻿using BenchmarkDotNet.Attributes;
+using Nakshatra.Api.Model.Profile;
+using Nakshatra.Services.Api.Model.Blog;
 using Newtonsoft.Json;
 
 namespace Services.Blogger;
 
-public class BloggerService : IBloggerService
+[MemoryDiagnoser]
+public class BloggerService : IBlogService
 {
-    public Post GetBlogs(BlogInfo blogInfo, string nextPageToken, string searchTerm)
+    public string Url { get; set; }
+    public BloggerService(Blog blogConfiguration)
     {
-        Blog blog = null;
-        var post = new Post();
+        Url = $"{blogConfiguration.ApiUrl}/blogger/v3/blogs/" +
+           $"{blogConfiguration.BlogServiceId}/" +
+           $"posts?key={blogConfiguration.ApiKey}" +
+           $"&maxResults={blogConfiguration.RetrivalCount}";
+    }
+
+    [Benchmark]
+    public BlogDetails GetBlogs(string searchTerm)
+    {
+        BlogDetails blogDetails = null;
 
         //Get bloggers data based on the blog url & key
-        var googleBloggerApi = $"{blogInfo.Api}/blogger/v3/blogs/byurl?url={blogInfo.Url}&key={blogInfo.Key}";
-
         //add search
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            googleBloggerApi = googleBloggerApi + $"&labels={searchTerm}";
+            Url = Url + $"&labels={searchTerm}";
         }
 
         using (var httpClient = new HttpClient())
         {
-            using (var response = httpClient.GetAsync(googleBloggerApi))
+            using (var response = httpClient.GetAsync(Url))
             {
                 string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
-                blog = JsonConvert.DeserializeObject<Blog>(apiResponse);
+                blogDetails = JsonConvert.DeserializeObject<BlogDetails>(apiResponse);
             }
 
-            //Get the 1st page of the blog
-            var postUrl = $"{blog.Posts.SelfLink}?key={blogInfo.Key}";
+            ////Get the 1st page of the blog
+            //var postUrl = $"{blog.Posts.SelfLink}?key={blogInfo.Key}";
 
-            //if not 1st page, use nextPageToken to get next page
-            if (nextPageToken != null)
-            {
-                postUrl = postUrl + $"&pageToken={nextPageToken}";
-            }
+            ////if not 1st page, use nextPageToken to get next page
+            //if (nextPageToken != null)
+            //{
+            //    postUrl = postUrl + $"&pageToken={nextPageToken}";
+            //}
 
             //add search
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                postUrl = postUrl + $"&labels={searchTerm}";
-            }
-            using (var response = httpClient.GetAsync(postUrl))
-            {
-                string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
+            //if (!string.IsNullOrEmpty(searchTerm))
+            //{
+            //    postUrl = postUrl + $"&labels={searchTerm}";
+            //}
+            //using (var response = httpClient.GetAsync(postUrl))
+            //{
+            //    string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
 
-                try
-                {
-                    post = JsonConvert.DeserializeObject<Post>(apiResponse);
-                }
-                catch
-                {
-                    throw;
-                }
+            //    try
+            //    {
+            //        post = JsonConvert.DeserializeObject<Post>(apiResponse);
+            //    }
+            //    catch
+            //    {
+            //        throw;
+            //    }
 
-            }
+            //}
         }
-        return post;
+        return blogDetails;
+    }
+
+    public bool BlogExists()
+    {
+        using var httpClient = new HttpClient();
+        using var response = httpClient.GetAsync(Url);
+        string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
+        var blogDetails = JsonConvert.DeserializeObject<BlogDetails>(apiResponse);
+
+        if (blogDetails != null && blogDetails.Items.Count > 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

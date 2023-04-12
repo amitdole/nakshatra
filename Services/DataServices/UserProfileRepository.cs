@@ -7,11 +7,9 @@ namespace DataServices
 {
     public class UserProfileRepository : IUserProfileRepository
     {
-        private readonly ExtendedAttributes _configuration;
         private readonly IConfiguration _appSettings;
-        public UserProfileRepository(ExtendedAttributes configuration, IConfiguration appSettings)
+        public UserProfileRepository(IConfiguration appSettings)
         {
-            _configuration = configuration;
             _appSettings = appSettings;
         }
 
@@ -20,7 +18,7 @@ namespace DataServices
             var profile = new UserProfileInfo();
             using (var httpClient = new HttpClient())
             {
-                using (var response = httpClient.GetAsync($"{_appSettings["SuryaWebApi:Endpoint"]}/api/profile/{_appSettings["Profile:Id"]}"))
+                using (var response = httpClient.GetAsync($"{_appSettings["SuryaWebApi:Endpoint"]}/api/profile/{_appSettings["PersonalWebSiteUserId"]}"))
                 {
                     string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
                     profile = JsonConvert.DeserializeObject<UserProfileInfo>(apiResponse);

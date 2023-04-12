@@ -32,7 +32,7 @@ public class ProfileController : ControllerBase
     }
 
     [HttpGet, Route("{profileId}")]
-    public async Task<IActionResult> Get([FromRoute] int profileId)
+    public async Task<IActionResult> Get([FromRoute] string profileId)
     {
         if (!_cacheService.TryGet(string.Format(userProfileCacheKey, profileId), out Profile profile))
         {
@@ -47,7 +47,7 @@ public class ProfileController : ControllerBase
     public async Task<IActionResult> Add([FromBody] Profile profile)
     {
         var savedProfile = await _profileService.AddProfile(profile);
-        _cacheService.Set(string.Format(userProfileCacheKey, profile.Id), profile);
+        _cacheService.Set(string.Format(userProfileCacheKey, profile.ProfileId), profile);
         return Ok(savedProfile);
     }
 
@@ -56,16 +56,20 @@ public class ProfileController : ControllerBase
     {
         await _profileService.UpdateProfile(profile);
 
-        _cacheService.Set(string.Format(userProfileCacheKey, profile.Id), profile);
+        _cacheService.Set(string.Format(userProfileCacheKey, profile.ProfileId), profile);
 
         return Ok();
     }
 
     [HttpDelete, Route("{profileId}")]
-    public async Task<IActionResult> Delete([FromRoute] int profileId)
+    public async Task<IActionResult> Delete([FromRoute] string profileId)
     {
-        await _profileService.DeleteProfile(profileId);
+        var success = await _profileService.DeleteProfile(profileId);
 
-        return Ok();
+        if (!success)
+        {
+            return NotFound($"Profile Id not found: {profileId}");
+        }
+        return NoContent();
     }
 }

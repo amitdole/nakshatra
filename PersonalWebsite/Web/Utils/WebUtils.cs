@@ -1,4 +1,4 @@
-﻿namespace Web.Utils
+﻿namespace Nakshatra.PersonalWebsite.Web.Utils
 {
     public static class WebUtils
     {

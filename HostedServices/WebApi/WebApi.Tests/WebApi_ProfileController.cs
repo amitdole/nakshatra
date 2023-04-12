@@ -46,7 +46,7 @@ public class WebApi_Profile : IClassFixture<TestBase>
     {
         //Arange
 
-        var expectedProfileId = 10001;
+        var expectedProfileId = "10001";
 
         //Act
 
@@ -58,7 +58,7 @@ public class WebApi_Profile : IClassFixture<TestBase>
 
         var result = okObjectResult.Value.Should().BeAssignableTo<Profile>();
 
-        var actualProfileId = result.Subject.Id;
+        var actualProfileId = result.Subject.ProfileId;
 
         actualProfileId.Should().Be(expectedProfileId);
     }

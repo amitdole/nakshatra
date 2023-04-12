@@ -1,10 +1,10 @@
 ﻿@page
-@using Nakshatra.Api.Model
+@using Nakshatra.PersonalWebsite.Web.Pages
 @inject IConfiguration _config;
 
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
-}
+} 
 
-<partial name="_About" model="@Model.UserProfile"/>
+    <partial name="_About" model="@Model.UserProfile"/>

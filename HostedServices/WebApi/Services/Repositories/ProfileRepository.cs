@@ -8,7 +8,7 @@ public class ProfileRepository : IProfileRepository
 
     public ProfileRepository(ProfileContext profileContext) => _context = profileContext;
 
-    public async Task<Profile> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Profile> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         try
         {

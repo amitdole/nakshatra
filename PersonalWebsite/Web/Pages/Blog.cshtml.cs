@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Web.Models;
-using Services.Extensions;
 using Services.Blogger;
 using Nakshatra.Api.Model.Service;
 using Nakshatra.Core.Services.Caching;
 using Nakshatra.Api.Model.Profile;
+using Nakshatra.Services.Api.Model.Blog;
 
-namespace AspnetRun.Web.Pages
+namespace Nakshatra.PersonalWebsite.Web.Pages
 {
     public class BlogModel : PageModel
     {
@@ -15,9 +14,23 @@ namespace AspnetRun.Web.Pages
         private readonly IConfiguration _configuration;
         private IUserProfileService _userProfileService;
         private readonly ICacheService _cacheService;
+        private const string userProfileCacheKey = "user_profile_{0}";
+        private const string blogCacheKey = "{0}_blog_{1}";
+
+        [BindProperty(SupportsGet = true)]
+        public int CurrentPage { get; set; } = 1;
+        public int Count { get; set; }
+        public int PageSize { get; set; } = 10;
+        public int TotalPages => (int)Math.Ceiling(decimal.Divide(Count, PageSize));
+        public BlogDetails BlogDetails { get; set; }
+        public bool ShowPrevious => CurrentPage > 1;
+        public bool ShowNext => CurrentPage < TotalPages;
+        public bool ShowFirst => CurrentPage != 1;
+        public bool ShowLast => CurrentPage != TotalPages;
+
 
         [BindProperty]
-        public Post Posts { get; set; }
+        public UserProfileInfo Profile { get; set; }
 
         public BlogModel(ILogger<BlogModel> logger, IConfiguration configuration, IUserProfileService userProfileService, ICacheService cacheService)
         {
@@ -27,89 +40,67 @@ namespace AspnetRun.Web.Pages
             _cacheService = cacheService;
         }
 
-        public IActionResult OnGet(int? blog_page, string search)
+        public IActionResult OnGet(string name, string searchTerms)
         {
-            var userProfileCacheKey = $"user_profile";
-            
-            if (!_cacheService.TryGet(userProfileCacheKey, out UserProfileInfo profile))
+            try
             {
-                profile = _userProfileService.GetUserProfile(int.Parse(_configuration["Profile:Id"]));
-                _cacheService.Set(userProfileCacheKey, profile);
-            }
+                var blogItems = new List<BlogPost>();
 
-            //var profile = _profileService.GetProfile(10001);
-            var blogInfo = profile.BlogDetails.Where(b => b.Name.Equals("dotnetkari")).FirstOrDefault();
-            var page = blog_page;
-            // if on default page then page = 1
-            if (blog_page == null || blog_page == 0)
-            {
-                page = 1;
-            }
+                // Get User Profile
+                var profileId = int.Parse(_configuration["PersonalWebSiteUserId"]);
 
-            var _bloggerService = new BloggerService();
-
-            var bloggerPaginationCacheKey = $"dotnetkari_blogger_pagination";
-
-            if (!_cacheService.TryGet(bloggerPaginationCacheKey, out Dictionary<int, string> blogPages))
-            {
-                //Build Pagination
-                blogPages = BuildBloggerPagger(_bloggerService, search, blogInfo);
-                _cacheService.Set(bloggerPaginationCacheKey, blogPages);
-            }
-
-            var bloggerPostsCacheKey = $"dotnetkari_blogger_posts";
-
-            if (!_cacheService.TryGet(bloggerPostsCacheKey, out Post posts))
-            {
-                //Build Pagination
-                posts = _bloggerService.GetBlogs(blogInfo, blogPages[page ?? 1], search);
-                _cacheService.Set(bloggerPostsCacheKey, blogPages);
-            }
-
-            Posts = posts;
-            //Pages * total post per page [10]
-            posts.TotalItems = blogPages.Count * 10;
-
-            ViewData["BlogPage"] = page;
-            return Page();
-        }
-
-        public void OnPost(Contact profile)
-        {
-        }
-
-        private Dictionary<int, string> BuildBloggerPagger(BloggerService bloggerService, string search, BlogInfo blogInfo)
-        {
-            var page = 1;
-            var blogPages = new Dictionary<int, string>();
-            string nextPageToken = null;
-
-            //Default page does not have next token
-#pragma warning disable CS8604 // Possible null reference argument.
-            blogPages.Add(page, nextPageToken);
-#pragma warning restore CS8604 // Possible null reference argument.
-
-            //get 1st post page
-            var Posts = bloggerService.GetBlogs(blogInfo, nextPageToken, search);
-
-            //continue till last page is reached
-            while (Posts.NextPageToken != null)
-            {
-                page++;
-
-                //get post page
-                Posts = bloggerService.GetBlogs(blogInfo, Posts.NextPageToken, search);
-
-                //if page has next page then add NextPageToken to collection
-                if (Posts.NextPageToken != null)
+                if (!_cacheService.TryGet(userProfileCacheKey, out UserProfileInfo userProfile))
                 {
-                    blogPages.Add(page, Posts.NextPageToken);
+                    userProfile = _userProfileService.GetUserProfile(profileId);
+                    _cacheService.Set(string.Format(userProfileCacheKey, profileId), userProfile);
                 }
+
+                Profile = userProfile;
+
+                //Get Blog Configuration
+                var blogConfiguration = Profile.BlogDetails.Where(b => b.Name.Equals(name)).FirstOrDefault();
+
+                if (blogConfiguration == null)
+                {
+                    return NotFound();
+                }
+
+                var _bloggerService = new BloggerService(blogConfiguration);
+
+                var blogPostsCacheKey = string.Format(blogCacheKey, blogConfiguration.Name, searchTerms);
+
+                if (!_cacheService.TryGet(blogPostsCacheKey, out blogItems))
+                {
+
+                    blogItems = _bloggerService.GetBlogs(searchTerms).Items;
+                    _cacheService.Set(blogPostsCacheKey, blogItems);
+                }
+
+                // Set BlogDetails and the Total Count
+                var blogDetails = new BlogDetails
+                {
+                    BlogServiceId = blogConfiguration.BlogServiceId,
+                    Name = blogConfiguration.Name,
+                    ShortDescription = blogConfiguration.ShortDescription,
+                    LongDescription = blogConfiguration.LongDescription,
+                    Author = new Services.Api.Model.Blog.Author
+                    {
+                        DisplayName = blogConfiguration.AuthorName,
+                        BlogDescription = blogConfiguration.AuthorBlogDescription,
+                        Url = blogConfiguration.Url
+                    },
+                    Items = blogItems?.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList()
+                };
+
+                BlogDetails = blogDetails;
+                Count = blogItems != null ? blogItems.Count : 0;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error on Blog", e);
             }
 
-            //WebUtils.Set(Response, "BlogPostPage", JsonConvert.SerializeObject(blogPages), 1200);
-
-            return blogPages;
+            return Page();
         }
     }
 }

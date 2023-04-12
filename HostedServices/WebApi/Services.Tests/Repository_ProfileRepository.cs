@@ -10,7 +10,7 @@ namespace Nakshatra.HostedServices.Services.Tests
         {
             //Arange
 
-            var id = 10000;
+            var id = "10000";
 
             //Mocks
 
@@ -21,7 +21,7 @@ namespace Nakshatra.HostedServices.Services.Tests
             var repository = mocker.CreateInstance<IProfileRepository>();
             var user = repository.GetByIdAsync(id).Result;
 
-            var actual = user?.PersonalDetails?.Id;
+            var actual = user?.PersonalDetails?.PersonalId;
 
             //Assert
 

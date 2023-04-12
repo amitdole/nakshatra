@@ -2,54 +2,40 @@
 using Microsoft.ApplicationInsights.AspNetCore;
 using Microsoft.Extensions.Options;
 using Services.Profile;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Identity.Web;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.Identity.Web.UI;
 using Nakshatra.Api.Repositories;
 using Nakshatra.Api.Model.Service;
 using Nakshatra.Core.Api.Model.Caching;
 using Nakshatra.Core.Services.Caching;
 using System.Configuration;
 using Nakshatra.Api.Model.Profile;
+using Nakshatra.Core.Services.Email;
+using Nakshatra.Services.Profile;
+using Serilog;
+using Serilog.Enrichers;
 
 public class Startup
 {
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
+
+        Log.Logger = new LoggerConfiguration()
+         .ReadFrom.Configuration(configuration)
+         .Enrich.With(
+          new MachineNameEnricher(),
+          new ThreadIdEnricher()
+        ).CreateLogger();
     }
 
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
-
         services.AddControllersWithViews();
-
-        //services.AddDbContext<WebContext>(options =>
-        //        options.UseSqlServer(Configuration.GetConnectionString("WebContextConnection")));
-
-        //services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-        //    .AddEntityFrameworkStores<WebContext>();
-
-        services.AddRazorPages(options =>
-        {
-            options.Conventions.AuthorizePage("/reminders");
-        })
-            .AddMvcOptions(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-                options.Filters
-                .Add(new AuthorizeFilter(policy));
-            }).AddMicrosoftIdentityUI();
-
+        services.AddRazorPages();
 
         services.AddApplicationInsightsTelemetry();
+
 
         services.AddSingleton<IJavaScriptSnippet, JavaScriptSnippet>();
 
@@ -62,21 +48,19 @@ public class Startup
         services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
 
         services.AddMemoryCache();
-        services.AddTransient<MemoryCacheService>();
-        services.AddTransient<Func<CacheType, ICacheService>>(serviceProvider => key =>
+
+        if (Configuration["CacheProvider"].Equals("memory", StringComparison.InvariantCultureIgnoreCase))
         {
-            switch (key)
-            {
-                case CacheType.Memory:
-                    return serviceProvider.GetService<MemoryCacheService>();
-                default:
-                    return serviceProvider.GetService<MemoryCacheService>();
-            }
-        });
+            services.AddTransient<ICacheService, MemoryCacheService>();
+        }
+        else
+        {
+            services.AddTransient<ICacheService, RedisCacheService>();
+        }
+
+        services.AddSingleton<IEmailService, EmailService>();
 
         var configDictonary = new Dictionary<string, string>();
-        configDictonary.Add("UserProfiles", Configuration["UserProfiles"]);
-        configDictonary.Add("SendGridAPISecretKey", Configuration["SendGridAPISecretKey"]);
 
         Action<ExtendedAttributes> configuration = (opt =>
         {
@@ -85,11 +69,6 @@ public class Startup
 
         services.Configure(configuration);
         services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<Configuration>>().Value);
-    }
-
-    private static string GetAuthenticationScheme()
-    {
-        return CookieAuthenticationDefaults.AuthenticationScheme;
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -108,11 +87,6 @@ public class Startup
         app.UseStaticFiles();
 
         app.UseRouting();
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-       
 
         app.UseEndpoints(endpoints =>
         {

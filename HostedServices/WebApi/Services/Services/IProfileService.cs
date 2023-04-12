@@ -4,9 +4,9 @@ namespace Nakshatra.HostedServices.Services.Services;
 
 public interface IProfileService
 {
-    Task<Profile> GetProfile(int profileId);
+    Task<Profile> GetProfile(string profileId);
     Task<Profile> AddProfile(Profile profile);
     Task<IReadOnlyList<Profile>> ListAllProfiles();
-    Task DeleteProfile(int profileId);
+    Task<bool> DeleteProfile(string profileId);
     Task UpdateProfile(Profile profile);
 }

@@ -1,4 +1,5 @@
-﻿@model Nakshatra.Api.Model.Profile.UserProfileInfo
+﻿@using System.Globalization;
+@model Nakshatra.Api.Model.Profile.UserProfileInfo
 
 <!--================Home Banner Area =================-->
 <section class="home_banner_area">
@@ -13,18 +14,17 @@
 						<div class="personal_text">
 							<h6>Hello Everybody, i am</h6>
 							<h3>@Model.PersonalDetails.FirstName @Model.PersonalDetails.LastName</h3>
-							<h4>@Model.ExperienceDetails.OrderByDescending(e => e.Id).Select(e => e.Role).FirstOrDefault()</h4>
+							<h4>@Model.ExperienceDetails.OrderByDescending(e => e.ExperienceId).Select(e => e.Role).FirstOrDefault()</h4>
 							<p>@Model.ShortDescription</p>
 							<ul class="list basic_info">
 								<li><a href="#"><i class="lnr lnr-calendar-full"></i> @String.Format("{0}st {1}",@Model.PersonalDetails.DateofBirth.Day, @Model.PersonalDetails.DateofBirth.ToString("MMMM"))</a></li>
-								@*<li><a href="#"><i class="lnr lnr-phone-handset"></i> 44 (012) 6954 783</a></li>*@
 								<li><a href="#"><i class="lnr lnr-envelope"></i> @Model.PersonalDetails.Email</a></li>
-								<li><a href="#"><i class="lnr lnr-home"></i>@Model.AddressDetails.Where(a => a.Id == @Model.PersonalDetails.AddressId).Select(p => p.State).FirstOrDefault(), @Model.AddressDetails.Where(a => a.Id == @Model.PersonalDetails.AddressId).Select(p => p.Country).FirstOrDefault()</a></li>
+								<li><a href="#"><i class="lnr lnr-home"></i>@Model.AddressDetails.Where(a => a.AddressId == @Model.PersonalDetails.AddressId).Select(p => p.State).FirstOrDefault(), @Model.AddressDetails.Where(a => a.AddressId == @Model.PersonalDetails.AddressId).Select(p => p.Country).FirstOrDefault()</a></li>
 							</ul>
 							<ul class="list personal_social">
-                                <li><a href="https://dotnetkari.blogspot.com/"><i class="fa fa-gears"></i></a></li>
-        						<li><a href="https://www.linkedin.com/in/amit-dole-41a3b420/"><i class="fa fa-linkedin"></i></a></li>
-                                <li><a href="https://www.facebook.com/amit.dole.7"><i class="fa fa-facebook"></i></a></li>
+                                <li><a target="_blank" href="@Model.SocialDetails.Where(s => s.Name.Equals("Blogger/dotnetkari", StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Link).FirstOrDefault()"><i class="fa fa-gears"></i></a></li>
+                                <li><a target="_blank" href="@Model.SocialDetails.Where(s => s.Name.Equals("LinkedIn", StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Link).FirstOrDefault()"><i class="fa fa-linkedin"></i></a></li>
+                                <li><a target="_blank" href="@Model.SocialDetails.Where(s => s.Name.Equals("FaceBook", StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Link).FirstOrDefault()"><i class="fa fa-facebook"></i></a></li>
 			                </ul>
 						</div>
 					</div>
@@ -94,7 +94,7 @@
 			<div class="tab-content" id="myTabContent">
 				<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 					<ul class="list">
-                        @foreach (var experience in @Model.ExperienceDetails.OrderByDescending(o => o.Id))
+                        @foreach (var experience in @Model.ExperienceDetails.OrderByDescending(o => o.ExperienceId))
                         {
 						    <li>
 							    <span></span>
@@ -110,8 +110,8 @@
                                         }
 								    </div>
 								    <div class="media-body">
-									    <h4>@Model.CompanyDetails.Where(c => c.Id == @experience.CompanyId).Select(c => c.Name).FirstOrDefault()</h4>
-									    <p>@experience.Role <br />@Model.AddressDetails.Where(a => a.Id == @Model.CompanyDetails.Where(c => c.Id == @experience.CompanyId).Select(s=>s.AddressId).FirstOrDefault()).Select(p => p.City).FirstOrDefault(), @Model.AddressDetails.Where(a => a.Id == @Model.CompanyDetails.Where(c => c.Id == @experience.CompanyId).Select(s=>s.AddressId).FirstOrDefault()).Select(p => p.Country).FirstOrDefault()</p>
+									    <h4>@Model.CompanyDetails.Where(c => c.CompanyId == @experience.CompanyId).Select(c => c.Name).FirstOrDefault()</h4>
+									    <p>@experience.Role <br />@Model.AddressDetails.Where(a => a.AddressId == @Model.CompanyDetails.Where(c => c.AddressId == @experience.CompanyId).Select(s=>s.AddressId).FirstOrDefault()).Select(p => p.City).FirstOrDefault(), @Model.AddressDetails.Where(a => a.AddressId == @Model.CompanyDetails.Where(c => c.CompanyId == @experience.CompanyId).Select(s=>s.AddressId).FirstOrDefault()).Select(p => p.Country).FirstOrDefault()</p>
 								    </div>
 							    </div>
 						    </li>
@@ -131,7 +131,7 @@
                                      <div></div>
 								    <div class="media-body">
 									    <h4>@education.College</h4>
-									    <p>@education.Qualification <br />@Model.AddressDetails.Where(a => a.Id == @education.AddressId).Select(p => p.City).FirstOrDefault(), @Model.AddressDetails.Where(a => a.Id == @education.AddressId).Select(p => p.Country).FirstOrDefault()</p>
+									    <p>@education.Qualification <br />@Model.AddressDetails.Where(a => a.AddressId == @education.AddressId).Select(p => p.City).FirstOrDefault(), @Model.AddressDetails.Where(a => a.AddressId == @education.AddressId).Select(p => p.Country).FirstOrDefault()</p>
 								    </div>
 							    </div>
 						    </li>
@@ -143,70 +143,53 @@
     </div>
 </section>
 <!--================End My Tabs Area =================-->
-        
-<!--================Feature Area =================-->
-@*<section class="feature_area p_120">
-    <div class="container">
-        <div class="main_title">
-        	<h2>offerings to my clients</h2>
-        	<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see some for as low as $.17 each.</p>
-        </div>
-        <div class="feature_inner row">
-        	<div class="col-lg-4 col-md-6">
-        		<div class="feature_item">
-        			<i class="flaticon-city"></i>
-        			<h4>Architecture</h4>
-        			<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see some for as low as $17 each.</p>
-        		</div>
-        	</div>
-        	<div class="col-lg-4 col-md-6">
-        		<div class="feature_item">
-        			<i class="flaticon-skyline"></i>
-        			<h4>Interior Design</h4>
-        			<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see some for as low as $17 each.</p>
-        		</div>
-        	</div>
-        	<div class="col-lg-4 col-md-6">
-        		<div class="feature_item">
-        			<i class="flaticon-sketch"></i>
-        			<h4>Concept Design</h4>
-        			<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see some for as low as $17 each.</p>
-        		</div>
-        	</div>
-        </div>
-    </div>
-</section>*@
 
+<!--================Start Certifications =================-->
 <section class="feature_area p_120">
     <div class="container">
         <div class="main_title">
-        	<h2>My Work</h2>
+            <h2>Certifications</h2>
         </div>
         <div class="feature_inner row">
-            <div class="col-lg-4 col-md-6">
-        	    <div class="feature_item">
-        		    <i class="flaticon-city"></i>
-        		    <h4><a href="https://github.com/amitdole/nakshatra">amitdole.com</a></h4>
-        		    <p>Repository for this website, built on .NET core, bootstrap, web api, Cosmos DB & hosted on Azure cloud</p>
-        	    </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-        	    <div class="feature_item">
-        		    <i class="flaticon-city"></i>
-        		    <h4><a href="https://github.com/amitdole/nakshatra/tree/master/WebApi">amitdole web api</a></h4>
-        		    <p>Repository for my custom web apis built on .NET core, web api, Cosmos DB & hosted on Azure cloud</p>
-        	    </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-        	    <div class="feature_item">
-        		    <i class="flaticon-city"></i>
-        		    <h4><a href="https://github.com/amitdole/microsoftazurecertification">Microsoft Azure Certification</a></h4>
-        		    <p>Repository for Microsoft Azure Certification resources & projects</p>
-        	    </div>
-            </div>
+            @foreach (var certification in @Model.CertificationDetails)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature_item">
+                        <i class="fa fa-certificate"></i>
+                        <h4>@certification.Name</h4>
+                        <p>@certification.DateIssued.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)</p>
+                        <p><a href="@certification.Link">Show credential</a></p>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </section>
+
+<!--================End Certifications =================-->
+ 
+
+<!--================Start My Work =================-->
+<section class="feature_area p_120">
+    <div class="container">
+        <div class="main_title">
+            <h2>My Work</h2>
+        </div>
+        <div class="feature_inner row">
+            @foreach (var project in @Model.ProjectDetails)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature_item">
+                        <i class="fa fa-rocket"></i>
+                        <h4><a href="@project.Link">@project.Name</a></h4>
+                        <p>@project.Description</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!--================End My Work =================-->
 
 <section class="feature_area p_120">
     <div class="container">
@@ -218,7 +201,7 @@
             {
                 <div class="col-lg-4 col-md-6">
         	        <div class="feature_item">
-        		        <i class="flaticon-city"></i>
+                        <i class="fa fa-arrow-right"></i>
         		        <h4>@workFlow.Name</h4>
         		        <p>@workFlow.Description</p>
         	        </div>
@@ -228,150 +211,6 @@
     </div>
 </section>
 <!--================End Feature Area =================-->
-        
-<!--================Home Gallery Area =================-->
-@*<section class="home_gallery_area p_120">
-    <div class="container">
-        <div class="main_title">
-        	<h2>Our Latest Featured Projects</h2>
-        	<p>Who are in extremely love with eco friendly system.</p>
-        </div>
-        <div class="isotope_fillter">
-        	<ul class="gallery_filter list">
-				<li class="active" data-filter="*"><a href="#">All</a></li>
-				<li data-filter=".brand"><a href="#">Vector</a></li>
-				<li data-filter=".manipul"><a href="#">Raster</a></li>
-				<li data-filter=".creative"><a href="#">UI/UX</a></li>
-				<li data-filter=".design"><a href="#">Printing</a></li>
-			</ul>
-        </div>
-    </div>
-    <div class="container">
-        <div class="gallery_f_inner row imageGallery1">
-        	<div class="col-lg-4 col-md-4 col-sm-6 brand manipul design print">
-        		<div class="h_gallery_item">
-        			<div class="g_img_item">
-        				<img class="img-fluid" src="img/gallery/project-1.jpg" alt="">
-        				<a class="light" href="img/gallery/project-1.jpg"><img src="img/gallery/icon.png" alt=""></a>
-        			</div>
-        			<div class="g_item_text">
-        				<h4>3D Helmet Design</h4>
-        				<p>Client Project</p>
-        			</div>
-        		</div>
-        	</div>
-        	<div class="col-lg-4 col-md-4 col-sm-6 brand manipul creative">
-        		<div class="h_gallery_item">
-        			<div class="g_img_item">
-        				<img class="img-fluid" src="img/gallery/project-2.jpg" alt="">
-        				<a class="light" href="img/gallery/project-2.jpg"><img src="img/gallery/icon.png" alt=""></a>
-        			</div>
-        			<div class="g_item_text">
-        				<h4>2D Vinyl Design</h4>
-        				<p>Client Project</p>
-        			</div>
-        		</div>
-        	</div>
-        	<div class="col-lg-4 col-md-4 col-sm-6 manipul creative design print">
-        		<div class="h_gallery_item">
-        			<div class="g_img_item">
-        				<img class="img-fluid" src="img/gallery/project-3.jpg" alt="">
-        				<a class="light" href="img/gallery/project-3.jpg"><img src="img/gallery/icon.png" alt=""></a>
-        			</div>
-        			<div class="g_item_text">
-        				<h4>Creative Poster Design</h4>
-        				<p>Client Project</p>
-        			</div>
-        		</div>
-        	</div>
-        	<div class="col-lg-4 col-md-4 col-sm-6 brand creative print">
-        		<div class="h_gallery_item">
-        			<div class="g_img_item">
-        				<img class="img-fluid" src="img/gallery/project-4.jpg" alt="">
-        				<a class="light" href="img/gallery/project-4.jpg"><img src="img/gallery/icon.png" alt=""></a>
-        			</div>
-        			<div class="g_item_text">
-        				<h4>Embosed Logo Design</h4>
-        				<p>Client Project</p>
-        			</div>
-        		</div>
-        	</div>
-        	<div class="col-lg-4 col-md-4 col-sm-6 brand manipul design">
-        		<div class="h_gallery_item">
-        			<div class="g_img_item">
-        				<img class="img-fluid" src="img/gallery/project-5.jpg" alt="">
-        				<a class="light" href="img/gallery/project-5.jpg"><img src="img/gallery/icon.png" alt=""></a>
-        			</div>
-        			<div class="g_item_text">
-        				<h4>3D Disposable Bottle</h4>
-        				<p>Client Project</p>
-        			</div>
-        		</div>
-        	</div>
-        	<div class="col-lg-4 col-md-4 col-sm-6 brand creative">
-        		<div class="h_gallery_item">
-        			<div class="g_img_item">
-        				<img class="img-fluid" src="img/gallery/project-6.jpg" alt="">
-        				<a class="light" href="img/gallery/project-6.jpg"><img src="img/gallery/icon.png" alt=""></a>
-        			</div>
-        			<div class="g_item_text">
-        				<h4>3D Logo Design</h4>
-        				<p>Client Project</p>
-        			</div>
-        		</div>
-        	</div>
-        </div>
-        <div class="more_btn">
-        	<a class="main_btn" href="#">Load More Items</a>
-        </div>
-    </div>
-</section>*@
-<!--================End Home Gallery Area =================-->
-        
+ 
 <!--================Testimonials Area =================-->
-@*<section class="testimonials_area p_120">
-    <div class="container">
-        <div class="main_title">
-        	<h2>Testimonials</h2>
-        	<p>If you are looking at blank cassettes on the web, you may be very confused at the difference in price. You may see some for as low as $.17 each.</p>
-        </div>
-        <div class="testi_inner">
-			<div class="testi_slider owl-carousel">
-				<div class="item">
-					<div class="testi_item">
-						<p>As conscious traveling Paup ers we must always be oncerned about our dear Mother Earth. If you think about it, you travel across her face</p>
-						<h4>Fanny Spencer</h4>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star-half-o"></i></a>
-					</div>
-				</div>
-				<div class="item">
-					<div class="testi_item">
-						<p>As conscious traveling Paup ers we must always be oncerned about our dear Mother Earth. If you think about it, you travel across her face</p>
-						<h4>Fanny Spencer</h4>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star-half-o"></i></a>
-					</div>
-				</div>
-				<div class="item">
-					<div class="testi_item">
-						<p>As conscious traveling Paup ers we must always be oncerned about our dear Mother Earth. If you think about it, you travel across her face</p>
-						<h4>Fanny Spencer</h4>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star"></i></a>
-						<a href="#"><i class="fa fa-star-half-o"></i></a>
-					</div>
-				</div>
-			</div>
-        </div>
-    </div>
-</section>*@
 <!--================End Testimonials Area =================-->

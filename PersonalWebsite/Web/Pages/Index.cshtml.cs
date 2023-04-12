@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Nakshatra.Api.Model.Profile;
 using Nakshatra.Api.Model.Service;
 using Nakshatra.Core.Services.Caching;
-using Services.Profile;
 
-namespace Web.Pages
+namespace Nakshatra.PersonalWebsite.Web.Pages
 {
     public class IndexModel : PageModel
     {
@@ -28,19 +27,22 @@ namespace Web.Pages
         {
             var cacheKey = $"user_profile";
 
-            if (!_cacheService.TryGet(cacheKey, out UserProfileInfo userProfile))
+            try
             {
-                userProfile = _userProfileService.GetUserProfile(int.Parse(_configuration["Profile:Id"]));
-                _cacheService.Set(cacheKey, userProfile);
+                if (!_cacheService.TryGet(cacheKey, out UserProfileInfo userProfile))
+                {
+                    userProfile = _userProfileService.GetUserProfile(int.Parse(_configuration["PersonalWebSiteUserId"]));
+                    _cacheService.Set(cacheKey, userProfile);
+                }
+
+                UserProfile = userProfile;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error on Contact", e);
             }
 
-            UserProfile = userProfile;
-
             return Page();
-        }
-
-        public void OnPost(Web.Models.Contact profile)
-        {
         }
     }
 }

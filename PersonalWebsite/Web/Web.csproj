@@ -6,10 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationInsightsResourceId>/subscriptions/73e25167-2e08-4de4-ab44-e1ff4b6f991f/resourceGroups/Nakshatra_Resource_Group/providers/microsoft.insights/components/Nakshatra_AppInsights_Resource</ApplicationInsightsResourceId>
     <UserSecretsId>7637beec-209d-4b96-bb48-73971af6e200</UserSecretsId>
-    <AssemblyName>Nakshatra.Web</AssemblyName>
+    <AssemblyName>Nakshatra.PersonalWebsite.Web</AssemblyName>
+    <RootNamespace>Nakshatra.PersonalWebsite.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\Shared\NewFolder\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
@@ -27,9 +29,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="2.6.1" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.6.1" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="2.7.0" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.7.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.5" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>

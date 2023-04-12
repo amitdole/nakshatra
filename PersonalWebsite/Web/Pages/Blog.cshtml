@@ -1,210 +1,235 @@
 ﻿@page
 @using Nakshatra.Api.Model
-@using AspnetRun.Web.Pages
+@using Nakshatra.PersonalWebsite.Web.Pages
 @inject IConfiguration _config;
 
 @model BlogModel
 @{
-ViewData["Title"] = "Blog page";
+    ViewData["Title"] = "Blog page";
 }
 
 <!--================Home Banner Area =================-->
 <section class="home_banner_area blog_banner">
     <div class="banner_inner d-flex align-items-center">
         <div class="overlay bg-parallax" data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
-		<div class="container">
-			<div class="blog_b_text text-center">
-				<h2>Dotnetkari Blog</h2>
-				<p>DOT NET developer blog(s)</p>
-				<a class="white_bg_btn" href="https://dotnetkari.blogspot.com/">View More</a>
-			</div>
-		</div>
+        <div class="container">
+            <div class="blog_b_text text-center">
+                <h2>@Model.BlogDetails.ShortDescription</h2>
+                <p>@Model.BlogDetails.LongDescription</p>
+                <a class="white_bg_btn" target="_blank" href="https://dotnetkari.blogspot.com/">View More</a>
+            </div>
+        </div>
     </div>
 </section>
 <!--================End Home Banner Area =================-->
-        
 <!--================Blog Area =================-->
-<section class="blog_area" id="blog">
+<section class="blog_area" id="posts">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
                 <div class="blog_left_sidebar">
                     <nav class="blog-pagination justify-content-center d-flex">
-		                <ul class="pagination">
-                            @{
-                                double totalPages = @Model.Posts.TotalItems / 10;
-                                var maxPage = Math.Ceiling(totalPages);
-                                var currentPage =  @ViewData["BlogPage"] == null? 1: int.Parse(@ViewData["BlogPage"].ToString());
-                                var previousPage = currentPage == 1 ? 0 : currentPage - 1;
-                                var nextPage = currentPage == maxPage ? 0 : currentPage + 1;
-                            }
 
-                            <li class="page-item">
-                                @if (previousPage > 0)
-                                {
-                                    <a href="?blog_page=@previousPage#blog" class="page-link" aria-label="Previous">
-                                        <span aria-hidden="true">
-                                            <span class="lnr lnr-chevron-left"></span>
-                                        </span>
-                                    </a>
-                                }
-                            </li>
-                            @for (var i = 10; i < @Model.Posts.TotalItems; i+=10)
-                            {
-                                var pageNumber = i/10;
-
-                                if (currentPage == pageNumber)
-                                {
-                                     <li class="page-item active">
-                                        <a href="?blog_page=@(@i/10)#blog" class="page-link">@(@i/10)</a>
-                                    </li>
-                                } 
-                                else
-                                {
-                                     <li class="page-item">
-                                        <a href="?blog_page=@(@i/10)#blog" class="page-link">@(@i/10)</a>
-                                     </li>
-                                }
-                            }
-		                    <li class="page-item">
-                                 @if (nextPage > 0)
-                                {
-                                    <a href="?blog_page=@nextPage#blog" class="page-link" aria-label="Next">
-                                        <span aria-hidden="true">
-                                            <span class="lnr lnr-chevron-right"></span>
-                                        </span>
-                                    </a>
-                                }
-                            </li>
-		                </ul>
-		            </nav>
-                    @foreach (var post in @Model.Posts.Items)
-                    {
-                        <article class="row blog_item">
-                            <div class="col-md-3">
-                                <div class="blog_info text-right">
-                                    <div class="post_tag">
-                                            @foreach (var label in post.Labels)
-                                            {
-                                                <a href="?search=@label">@label,</a>
-                                            }
-                                    </div>
-                                    <ul class="blog_meta list">
-                                        <li><a href="@post.Author.Url">@post.Author.DisplayName<i class="lnr lnr-user"></i></a></li>
-                                        <li><a href="#">@String.Format("{0}, {1} {2}", @post.Published.ToString("MMMM"), @post.Published.ToString("dd"), @post.Published.ToString("yyyy"))<i class="lnr lnr-calendar-full"></i></a></li>
-                                        @* <li><a href="#">1.2M Views<i class="lnr lnr-eye"></i></a></li>*@
-                                        <li><a href="@post.Replies.SelfLink">@post.Replies.TotalItems Comments<i class="lnr lnr-bubble"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="blog_post">
-                                    <img src="img/blog/main-blog/m-blog-1.jpg" alt="">
-                                    <div class="blog_details">
-                                        <h1>@post.Title</h1>
-                                        @Html.Raw(@post.Content)
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
+                    </nav>
+                    @{
+                        var blogName = @Request.Query["name"];
+                        var searchTerms = @Request.Query["searchTerms"];
                     }
-                    <nav class="blog-pagination justify-content-center d-flex">
-		                <ul class="pagination">
-		                    <li class="page-item">
-                                 @if (previousPage > 0)
-                                {
-                                    <a href="?blog_page=@previousPage#blog" class="page-link" aria-label="Previous">
-                                        <span aria-hidden="true">
-                                            <span class="lnr lnr-chevron-left"></span>
-                                        </span>
-                                    </a>
-                                }
-                            </li>
-                            @for (var i = 10; i < @Model.Posts.TotalItems; i+=10)
-                            {
-                                var pageNumber = i/10;
 
-                                if (currentPage == pageNumber)
+                    @{
+                        List<string> GetSearchFilters(string filter)
+                        {
+                            var listSearchFilters = new List<string>();
+
+
+                            if (searchTerms.Any())
+                            {
+                                listSearchFilters = searchTerms.ToString().Split(',').ToList();
+
+                                if (!listSearchFilters.Contains(filter))
                                 {
-                                     <li class="page-item active">
-                                        <a href="?blog_page=@(@i/10)#blog" class="page-link">@(@i/10)</a>
-                                    </li>
-                                } 
-                                else
-                                {
-                                     <li class="page-item">
-                                        <a href="?blog_page=@(@i/10)#blog" class="page-link">@(@i/10)</a>
-                                     </li>
+                                    listSearchFilters.Add(filter);
                                 }
                             }
-		                    <li class="page-item">
-                                 @if (nextPage > 0)
+                            else
+                            {
+                                listSearchFilters.Add(filter);
+                            }
+
+                            return listSearchFilters;
+                        }
+
+                        string[] GetQuerySearchTerms()
+                        {
+                            var listQuerySearchTerms = new List<string>();
+                            var searchTerms = @Request.Query["searchTerms"];
+
+                            if (searchTerms.Any())
+                            {
+                                listQuerySearchTerms = searchTerms.ToString().Split(',').ToList();
+                            }
+
+                            return listQuerySearchTerms.Any() ? listQuerySearchTerms.ToArray() : new string[0];
+                        }
+
+                        List<string> GetLabels(List<string> postlabels, string[] arraySearchTerms)
+                        {
+                            if (postlabels != null)
+                            {
+                                foreach (var searchTerm in arraySearchTerms)
                                 {
-                                    <a href="?blog_page=@nextPage#blog" class="page-link" aria-label="Next" >
-                                        <span aria-hidden="true">
-                                            <span class="lnr lnr-chevron-right"></span>
-                                        </span>
-                                    </a>
+                                    if (postlabels.Contains(searchTerm))
+                                    {
+                                        postlabels.Remove(searchTerm);
+                                    }
                                 }
+                            }
+
+                            return postlabels ?? new List<string>();
+                        }
+                    }
+
+                    <ul class="pagination">
+                        <li class="page-item @(!Model.ShowFirst? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="1" asp-fragment="posts" class="page-link"><i class="fa fa-fast-backward"></i></a>
+                        </li>
+
+                        <li class="page-item @(!Model.ShowPrevious? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage -1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-backward"></i></a>
+                        </li>
+                        <li class="page-item  @(!Model.ShowNext? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage + 1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-forward"></i></a>
+                        </li>
+
+                        <li class="page-item  @(!Model.ShowLast? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="@Model.TotalPages" asp-fragment="posts" class="page-link"><i class="fa fa-fast-forward"></i></a>
+                        </li>
+                    </ul>
+                    @if (@searchTerms.Any())
+                    {
+                        <ul class="pagination">
+                            <li>
+                                <a class="fa fa-remove" href="/blog?name=@blogName#posts">Clear Filters</a>
                             </li>
-		                </ul>
-		            </nav>
+                        </ul>
+                    }
+                    @if (@Model.BlogDetails?.Items == null)
+                    {
+                        <ul class="pagination">
+                            <li>
+                                <h4 class="text-danger">No records found.</h4>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        @foreach (var post in @Model.BlogDetails.Items)
+                        {
+                            <article class="row blog_item">
+                                <div class="col-md-3">
+                                    <div class="blog_info text-right">
+                                        <ul class="blog_meta list">
+                                            <li><a href="@Model.BlogDetails.Author.Url">@Model.BlogDetails.Author.DisplayName<i class="lnr lnr-user"></i></a></li>
+                                            <li><a href="#">@String.Format("{0}, {1} {2}", @post.Published.ToString("MMMM"), @post.Published.ToString("dd"), @post.Published.ToString("yyyy"))<i class="lnr lnr-calendar-full"></i></a></li>
+                                            <li><a href="#">@post.Replies.TotalItems Views<i class="lnr lnr-eye"></i></a></li>
+                                        </ul>
+                                        <div class="post_tag">
+                                            @{
+                                                //Get search filters applied earlier
+                                                var arrayQuerySearchTerms = GetQuerySearchTerms();
+
+                                                //Get all labels for post except the filters applied
+                                                var postLables = GetLabels(post.Labels, arrayQuerySearchTerms);
+
+                                                if (postLables.Any())
+                                                {
+                                                    @for (int i = 0; i < postLables.Count(); i++)
+                                                    {
+                                                        //Get search filters including the existing search filters applied
+                                                        var listSearchFilters = GetSearchFilters(@postLables[i]);
+                                                        <a href="?name=@blogName&searchTerms=@string.Join(',', listSearchFilters.ToArray())#posts">@postLables[i]</a>
+
+                                                        if (i + 1 < postLables.Count())
+                                                        {
+                                                            <label>,</label>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="blog_post">
+                                        <img src="img/blog/main-blog/m-blog-1.jpg" alt="">
+                                        <div class="blog_details">
+                                            <h1>@post.Title</h1>
+                                            @Html.Raw(@post.Content)
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        }
+                    }
+
+                    <ul class="pagination">
+                        <li class="page-item @(!Model.ShowFirst? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="1" asp-fragment="posts" class="page-link"><i class="fa fa-fast-backward"></i></a>
+                        </li>
+
+                        <li class="page-item @(!Model.ShowPrevious? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage -1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-backward"></i></a>
+                        </li>
+                        <li class="page-item  @(!Model.ShowNext? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage + 1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-forward"></i></a>
+                        </li>
+
+                        <li class="page-item  @(!Model.ShowLast? "disabled":"")">
+                            <a asp-page="/blog" asp-route-CurrentPage="@Model.TotalPages" asp-fragment="posts" class="page-link"><i class="fa fa-fast-forward"></i></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="blog_right_sidebar">
                     <aside class="single_sidebar_widget search_widget">
-                        <form action="blog" class="row">
+                        <form action="blog#posts" class="row">
                             <div class="input-group">
-                                <input type="text" name="search" class="form-control" placeholder="Search Posts">
+                                <input type="text" name="searchTerms" class="form-control" placeholder="Search Posts">
+                                <input value="@blogName" id="name" name="name" type="hidden">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="submit"><i class="lnr lnr-magnifier"></i></button>
-                                    @*<input type="submit"><i class="lnr lnr-magnifier"></input>*@
                                 </span>
                             </div><!-- /input-group -->
                         </form>
                         <div class="br"></div>
                     </aside>
                     <aside class="single_sidebar_widget author_widget">
-                        <img class="author_img rounded-circle" src="img/blog/author.png" alt="">
-                        <h4>Amit Dole</h4>
+                        <h4>@Model.BlogDetails.Author.DisplayName</h4>
                         <p>Blog writer</p>
                         <div class="social_icon">
-                            <a href="https://www.facebook.com/amit.dole.7"><i class="fa fa-facebook"></i></a>
-                            <a href="https://www.linkedin.com/in/amit-dole-41a3b420/"><i class="fa fa-linkedin"></i></a>
-                            <a href="https://github.com/amitdole"><i class="fa fa-github"></i></a>
+                            <a target="_blank" href="@Model.Profile.SocialDetails.Where(s => s.Name.Equals("Blogger/dotnetkari", StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Link).FirstOrDefault()"><i class="fa fa-facebook"></i></a>
+                            <a target="_blank" href="@Model.Profile.SocialDetails.Where(s => s.Name.Equals("LinkedIn", StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Link).FirstOrDefault()"><i class="fa fa-linkedin"></i></a>
+                            <a target="_blank" href="@Model.Profile.SocialDetails.Where(s => s.Name.Equals("FaceBook", StringComparison.InvariantCultureIgnoreCase)).Select(s => s.Link).FirstOrDefault()"><i class="fa fa-github"></i></a>
                         </div>
-                        <p>Blogging on everything .NET.</p>
-                        <div class="br"></div>
+                        <p>@Model.BlogDetails.Author.BlogDescription</p>
                     </aside>
                     <aside class="single_sidebar_widget ads_widget">
                         <a href="#"><img class="img-fluid" src="img/blog/add.jpg" alt=""></a>
                         <div class="br"></div>
                     </aside>
-                    <aside class="single-sidebar-widget newsletter_widget">
-                        <h4 class="widget_title">Newsletter</h4>
-                        <p>
-                        Here, I focus on a range of topics on technology and .NET in particular.
-                        </p>
-                        <div class="form-group d-flex flex-row">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></div>
-                                </div>
-                                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Enter email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email'">
-                            </div>
-                            <a href="#" class="bbtns">Subcribe</a>
-                        </div>	
-                        <p class="text-bottom">You can unsubscribe at any time</p>	
-                        <div class="br"></div>							
-                    </aside>
                     <aside class="single-sidebar-widget tag_cloud_widget">
                         <h4 class="widget_title">Tag Clouds</h4>
                         <ul class="list">
-                            @foreach (var label in @Model.Posts.Items.SelectMany(i => i.Labels).Distinct())
+                            @if (Model.BlogDetails?.Items != null)
+                            {
+                                @foreach (var label in @Model.BlogDetails.Items?.Where(i => i.Labels != null).SelectMany(i => i.Labels).Distinct())
                                 {
-                                <li><a href="?search=@label">@label</a></li>
+                                    <li>
+                                        <a href="?name=@blogName&searchTerms=@label#posts">@label</a>
+                                    </li>
                                 }
+                            }
                         </ul>
                     </aside>
                 </div>

@@ -1,4 +1,5 @@
 using Azure.Identity;
+using Serilog;
 
 namespace PersonalWebsite.Web
 {
@@ -6,11 +7,24 @@ namespace PersonalWebsite.Web
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Unhandled exception");
+            }
+            finally
+            {
+                Log.Information("Shut down complete");
+                Log.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
            Host.CreateDefaultBuilder(args)
+            .UseSerilog()
             .ConfigureAppConfiguration((context, config) =>
             {
                 var root = config.Build();
@@ -23,9 +37,9 @@ namespace PersonalWebsite.Web
            ExcludeInteractiveBrowserCredential = true,
            ExcludeSharedTokenCacheCredential = true,
            ExcludeVisualStudioCodeCredential = true,
-           ExcludeManagedIdentityCredential = false,
-           ExcludeAzureCliCredential = false,
-           ExcludeVisualStudioCredential = false
+           ExcludeManagedIdentityCredential = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development,
+           ExcludeAzureCliCredential = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development,
+           ExcludeVisualStudioCredential = true
        }));
             })
             .ConfigureWebHostDefaults(webBuilder =>

@@ -18,7 +18,7 @@ public class ProfileService : IProfileService
         return await _profileRepository.ListAllAsync();
     }
 
-    public async Task<Profile> GetProfile(int profileId)
+    public async Task<Profile> GetProfile(string profileId)
     {
         return await _profileRepository.GetByIdAsync(profileId);
     }
@@ -28,9 +28,15 @@ public class ProfileService : IProfileService
         await _profileRepository.UpdateAsync(profile);
     }
 
-    public async Task DeleteProfile(int profileId)
+    public async Task<bool> DeleteProfile(string profileId)
     {
         var profile = await _profileRepository.GetByIdAsync(profileId);
-        await _profileRepository.DeleteAsync(profile);
+        if (profile != null)
+        {
+            await _profileRepository.DeleteAsync(profile);
+            return true;
+        }
+
+        return false;
     }
 }

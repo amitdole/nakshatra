@@ -3,9 +3,15 @@
 [Serializable]
 public class Blog
 {
-    public string Id { get; set; }
+    public int BlogId { get; set; }
+    public string BlogServiceId { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
+    public string ShortDescription { get; set; }
+    public string LongDescription { get; set; }
+    public string AuthorName { get; set; }
+    public string AuthorBlogDescription { get; set; }
     public string Url { get; set; }
-    public BlogPost Posts { get; set; }
+    public int RetrivalCount { get; set; }
+    public string ApiUrl { get; set; }
+    public string ApiKey { get; set; }
 }

@@ -1,0 +1,26 @@
+2023-04-09 21:42:55.798 -07:00 [INF] User profile is available. Using 'C:\Users\Amit\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-04-09 21:42:56.891 -07:00 [INF] Now listening on: https://localhost:5001
+2023-04-09 21:42:56.894 -07:00 [INF] Now listening on: http://localhost:5000
+2023-04-09 21:42:56.897 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-04-09 21:42:56.898 -07:00 [INF] Hosting environment: Test
+2023-04-09 21:42:56.900 -07:00 [INF] Content root path: C:\Amit\Nakshatra\PersonalWebsite\Web
+2023-04-09 21:43:14.864 -07:00 [INF] Request starting HTTP/2 GET https://localhost:5001/ - -
+2023-04-09 21:43:14.925 -07:00 [INF] Executing endpoint '/Index'
+2023-04-09 21:43:15.024 -07:00 [INF] Route matched with {page = "/Index", action = "", controller = ""}. Executing page /Index
+2023-04-09 21:43:15.070 -07:00 [INF] Executing handler method Nakshatra.PersonalWebsite.Web.Pages.IndexModel.OnGet - ModelState is "Valid"
+2023-04-09 21:43:18.773 -07:00 [INF] Request starting HTTP/2 GET https://localhost:5001/ - -
+2023-04-09 21:43:18.777 -07:00 [INF] Executing endpoint '/Index'
+2023-04-09 21:43:18.780 -07:00 [INF] Route matched with {page = "/Index", action = "", controller = ""}. Executing page /Index
+2023-04-09 21:43:18.785 -07:00 [INF] Executing handler method Nakshatra.PersonalWebsite.Web.Pages.IndexModel.OnGet - ModelState is "Valid"
+2023-04-09 21:43:19.110 -07:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2023-04-09 21:43:19.110 -07:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2023-04-09 21:43:19.255 -07:00 [INF] Executed page /Index in 4224.8374ms
+2023-04-09 21:43:19.255 -07:00 [INF] Executed page /Index in 469.6908ms
+2023-04-09 21:43:19.258 -07:00 [INF] Executed endpoint '/Index'
+2023-04-09 21:43:19.259 -07:00 [INF] Executed endpoint '/Index'
+2023-04-09 21:43:19.290 -07:00 [INF] Request finished HTTP/2 GET https://localhost:5001/ - - - 200 - text/html;+charset=utf-8 4428.8981ms
+2023-04-09 21:43:19.303 -07:00 [INF] Request finished HTTP/2 GET https://localhost:5001/ - - - 200 - text/html;+charset=utf-8 530.6065ms
+2023-04-09 21:43:19.581 -07:00 [INF] Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - -
+2023-04-09 21:43:19.581 -07:00 [INF] Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - -
+2023-04-09 21:43:19.594 -07:00 [INF] Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - - - 200 11976 application/javascript;+charset=utf-8 13.1948ms
+2023-04-09 21:43:19.637 -07:00 [INF] Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 55.6021ms
