@@ -1,10 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>Nakshatra.Services.ServicesTests</AssemblyName>
     <RootNamespace>Nakshatra.Services.ServicesTests</RootNamespace>
   </PropertyGroup>
 
@@ -41,11 +40,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Api\Api.csproj" />
-    <ProjectReference Include="..\..\..\Core\Services\Services.csproj" />
-    <ProjectReference Include="..\..\..\HostedServices\WebApi\Services\Services.csproj" />
-    <ProjectReference Include="..\..\DataServices\DataServices.csproj" />
-    <ProjectReference Include="..\..\Services\Services.csproj" />
+    <ProjectReference Include="..\..\Core\Api\Api.csproj" />
+    <ProjectReference Include="..\..\Core\Services\Services.csproj" />
+    <ProjectReference Include="..\..\HostedServices\WebApi\Services\Services.csproj" />
+    <ProjectReference Include="..\DataServices\DataServices.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

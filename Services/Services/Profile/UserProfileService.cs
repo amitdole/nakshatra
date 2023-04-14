@@ -2,7 +2,7 @@
 using Nakshatra.Api.Repositories;
 using Nakshatra.Api.Model.Service;
 
-namespace Services.Profile;
+namespace Nakshatra.Services.Profile;
 
 public class UserProfileService : IUserProfileService
 {

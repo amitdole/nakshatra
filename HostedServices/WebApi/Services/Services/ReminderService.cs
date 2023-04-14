@@ -1,7 +1,7 @@
 ﻿using Nakshatra.HostedServices.Services.Queues;
 using Nakshatra.HostedServices.WebApi.Api.Entities.Reminders;
 
-namespace Nakshatra.HostedServices.Services.Services;
+namespace Nakshatra.HostedServices.WebApi.Services.Services;
 
 public class ReminderService : IReminderService
 {

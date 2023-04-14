@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services.Blogger;
+using Nakshatra.Services.Blogger;
 using Nakshatra.Api.Model.Service;
 using Nakshatra.Core.Services.Caching;
 using Nakshatra.Api.Model.Profile;
@@ -49,7 +49,7 @@ namespace Nakshatra.PersonalWebsite.Web.Pages
                 // Get User Profile
                 var profileId = int.Parse(_configuration["PersonalWebSiteUserId"]);
 
-                if (!_cacheService.TryGet(userProfileCacheKey, out UserProfileInfo userProfile))
+                if (!_cacheService.TryGet(string.Format(userProfileCacheKey, profileId), out UserProfileInfo userProfile))
                 {
                     userProfile = _userProfileService.GetUserProfile(profileId);
                     _cacheService.Set(string.Format(userProfileCacheKey, profileId), userProfile);
@@ -72,7 +72,7 @@ namespace Nakshatra.PersonalWebsite.Web.Pages
                 if (!_cacheService.TryGet(blogPostsCacheKey, out blogItems))
                 {
 
-                    blogItems = _bloggerService.GetBlogs(searchTerms).Items;
+                    blogItems = _bloggerService.GetBlogsAsync(searchTerms).Result.Items;
                     _cacheService.Set(blogPostsCacheKey, blogItems);
                 }
 
@@ -83,7 +83,7 @@ namespace Nakshatra.PersonalWebsite.Web.Pages
                     Name = blogConfiguration.Name,
                     ShortDescription = blogConfiguration.ShortDescription,
                     LongDescription = blogConfiguration.LongDescription,
-                    Author = new Services.Api.Model.Blog.Author
+                    Author = new Author
                     {
                         DisplayName = blogConfiguration.AuthorName,
                         BlogDescription = blogConfiguration.AuthorBlogDescription,

@@ -157,8 +157,8 @@
                     <div class="feature_item">
                         <i class="fa fa-certificate"></i>
                         <h4>@certification.Name</h4>
-                        <p>@certification.DateIssued.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)</p>
-                        <p><a href="@certification.Link">Show credential</a></p>
+                        <p><b>Issued: </b>@certification.DateIssued.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)</p>
+                        <p><a target="_blank" href="@certification.Link">Show credential</a></p>
                     </div>
                 </div>
             }
@@ -181,7 +181,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="feature_item">
                         <i class="fa fa-rocket"></i>
-                        <h4><a href="@project.Link">@project.Name</a></h4>
+                        <h4><a target="_blank" href="@project.Link">@project.Name</a></h4>
                         <p>@project.Description</p>
                     </div>
                 </div>

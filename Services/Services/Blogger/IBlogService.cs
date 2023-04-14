@@ -1,8 +1,8 @@
 ﻿using Nakshatra.Services.Api.Model.Blog;
 
-namespace Services.Blogger;
+namespace Nakshatra.Services.Blogger;
 public interface IBlogService
 {
     bool BlogExists();
-    BlogDetails GetBlogs(string searchTerm);
+    Task<BlogDetails> GetBlogsAsync(string searchTerm);
 }

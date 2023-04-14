@@ -1,4 +1,6 @@
-﻿namespace Nakshatra.Api.Model.Profile;
+﻿using Nakshatra.Services.Api.Model.Profile;
+
+namespace Nakshatra.Api.Model.Profile;
 
 [Serializable]
 public class UserProfileInfo

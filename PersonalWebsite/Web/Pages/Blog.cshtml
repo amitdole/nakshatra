@@ -91,18 +91,18 @@
 
                     <ul class="pagination">
                         <li class="page-item @(!Model.ShowFirst? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="1" asp-fragment="posts" class="page-link"><i class="fa fa-fast-backward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="1" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-fast-backward"></i></a>
                         </li>
 
                         <li class="page-item @(!Model.ShowPrevious? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage -1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-backward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage -1)" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-step-backward"></i></a>
                         </li>
                         <li class="page-item  @(!Model.ShowNext? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage + 1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-forward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage + 1)" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-step-forward"></i></a>
                         </li>
 
                         <li class="page-item  @(!Model.ShowLast? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="@Model.TotalPages" asp-fragment="posts" class="page-link"><i class="fa fa-fast-forward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="@Model.TotalPages" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-fast-forward"></i></a>
                         </li>
                     </ul>
                     @if (@searchTerms.Any())
@@ -129,9 +129,9 @@
                                 <div class="col-md-3">
                                     <div class="blog_info text-right">
                                         <ul class="blog_meta list">
-                                            <li><a href="@Model.BlogDetails.Author.Url">@Model.BlogDetails.Author.DisplayName<i class="lnr lnr-user"></i></a></li>
-                                            <li><a href="#">@String.Format("{0}, {1} {2}", @post.Published.ToString("MMMM"), @post.Published.ToString("dd"), @post.Published.ToString("yyyy"))<i class="lnr lnr-calendar-full"></i></a></li>
-                                            <li><a href="#">@post.Replies.TotalItems Views<i class="lnr lnr-eye"></i></a></li>
+                                            <li><a target="_blank" href="@Model.BlogDetails.Author.Url">@Model.BlogDetails.Author.DisplayName<i class="lnr lnr-user"></i></a></li>
+                                            <li><a>@String.Format("{0}, {1} {2}", @post.Published.ToString("MMMM"), @post.Published.ToString("dd"), @post.Published.ToString("yyyy"))<i class="lnr lnr-calendar-full"></i></a></li>
+                                            <li><a>@post.Replies.TotalItems Views<i class="lnr lnr-eye"></i></a></li>
                                         </ul>
                                         <div class="post_tag">
                                             @{
@@ -174,18 +174,18 @@
 
                     <ul class="pagination">
                         <li class="page-item @(!Model.ShowFirst? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="1" asp-fragment="posts" class="page-link"><i class="fa fa-fast-backward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="1" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-fast-backward"></i></a>
                         </li>
 
                         <li class="page-item @(!Model.ShowPrevious? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage -1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-backward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage -1)" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-step-backward"></i></a>
                         </li>
                         <li class="page-item  @(!Model.ShowNext? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage + 1)" asp-fragment="posts" class="page-link"><i class="fa fa-step-forward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="@(Model.CurrentPage + 1)" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-step-forward"></i></a>
                         </li>
 
                         <li class="page-item  @(!Model.ShowLast? "disabled":"")">
-                            <a asp-page="/blog" asp-route-CurrentPage="@Model.TotalPages" asp-fragment="posts" class="page-link"><i class="fa fa-fast-forward"></i></a>
+                            <a asp-page="/blog" asp-route-CurrentPage="@Model.TotalPages" asp-route-name="@blogName" asp-fragment="posts" class="page-link"><i class="fa fa-fast-forward"></i></a>
                         </li>
                     </ul>
                 </div>

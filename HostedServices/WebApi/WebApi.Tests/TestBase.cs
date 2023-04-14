@@ -6,6 +6,8 @@ using Nakshatra.Core.Api.Model.Caching;
 using Nakshatra.Core.Services.Caching;
 using Nakshatra.HostedServices.Services.Contexts;
 using Nakshatra.HostedServices.WebApi.Web.Controllers;
+using Nakshatra.HostedServices.WebApi.Services.Services;
+using Nakshatra.HostedServices.Services.Repositories;
 
 namespace Nakshatra.HostedServices.WebApi.Tests
 {
@@ -53,7 +55,7 @@ namespace Nakshatra.HostedServices.WebApi.Tests
             }
 
             serviceCollection.AddSingleton<Services.Services.IProfileService, Services.Services.ProfileService>();
-            serviceCollection.AddSingleton<Services.Repositories.IProfileRepository, Services.Repositories.ProfileRepository>();
+            serviceCollection.AddSingleton<IProfileRepository, ProfileRepository>();
             serviceCollection.AddSingleton<ProfileContext>();
             serviceCollection.AddSingleton<ProfileController, ProfileController>();
 

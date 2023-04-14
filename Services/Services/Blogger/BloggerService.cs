@@ -1,9 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
-using Nakshatra.Api.Model.Profile;
+using Nakshatra.Services.Api.Model.Profile;
 using Nakshatra.Services.Api.Model.Blog;
 using Newtonsoft.Json;
 
-namespace Services.Blogger;
+namespace Nakshatra.Services.Blogger;
 
 [MemoryDiagnoser]
 public class BloggerService : IBlogService
@@ -18,7 +18,7 @@ public class BloggerService : IBlogService
     }
 
     [Benchmark]
-    public BlogDetails GetBlogs(string searchTerm)
+    public async Task<BlogDetails> GetBlogsAsync(string searchTerm = null)
     {
         BlogDetails blogDetails = null;
 
@@ -33,38 +33,9 @@ public class BloggerService : IBlogService
         {
             using (var response = httpClient.GetAsync(Url))
             {
-                string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
+                string apiResponse = await response.Result.Content.ReadAsStringAsync();
                 blogDetails = JsonConvert.DeserializeObject<BlogDetails>(apiResponse);
             }
-
-            ////Get the 1st page of the blog
-            //var postUrl = $"{blog.Posts.SelfLink}?key={blogInfo.Key}";
-
-            ////if not 1st page, use nextPageToken to get next page
-            //if (nextPageToken != null)
-            //{
-            //    postUrl = postUrl + $"&pageToken={nextPageToken}";
-            //}
-
-            //add search
-            //if (!string.IsNullOrEmpty(searchTerm))
-            //{
-            //    postUrl = postUrl + $"&labels={searchTerm}";
-            //}
-            //using (var response = httpClient.GetAsync(postUrl))
-            //{
-            //    string apiResponse = response.Result.Content.ReadAsStringAsync().Result;
-
-            //    try
-            //    {
-            //        post = JsonConvert.DeserializeObject<Post>(apiResponse);
-            //    }
-            //    catch
-            //    {
-            //        throw;
-            //    }
-
-            //}
         }
         return blogDetails;
     }

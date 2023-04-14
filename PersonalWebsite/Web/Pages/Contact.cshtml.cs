@@ -60,25 +60,32 @@ namespace Nakshatra.PersonalWebsite.Web.Pages
         {
             try
             {
-                if (contact.Email != null)
+                if (!ModelState.IsValid)
                 {
-                    var response = _emailService.Send(new Nakshatra.Core.Api.Model.Email.EmailInfo
+                    Success = false;
+                }
+                else
+                {
+                    if (contact.Email != null)
                     {
-                        SenderName = contact.Name,
-                        SenderEmail = Profile.PersonalDetails.Email,
-                        ReceiverName = $"{Profile.PersonalDetails.FirstName} {Profile.PersonalDetails.LastName}",
-                        ReceiverEmail = Profile.PersonalDetails.ReceiveEmail,
-                        Subject = contact.Subject,
-                        Message = contact.Message
-                    });
+                        var response = _emailService.Send(new Nakshatra.Core.Api.Model.Email.EmailInfo
+                        {
+                            SenderName = contact.Name,
+                            SenderEmail = Profile.PersonalDetails.Email,
+                            ReceiverName = $"{Profile.PersonalDetails.FirstName} {Profile.PersonalDetails.LastName}",
+                            ReceiverEmail = Profile.PersonalDetails.ReceiveEmail,
+                            Subject = contact.Subject,
+                            Message = contact.Message
+                        });
 
-                    if (response != null && response.Result.IsSuccessStatusCode)
-                    {
-                        Success = true;
-                    }
-                    else
-                    {
-                        Success = false;
+                        if (response != null && response.Result.IsSuccessStatusCode)
+                        {
+                            Success = true;
+                        }
+                        else
+                        {
+                            Success = false;
+                        }
                     }
                 }
             }

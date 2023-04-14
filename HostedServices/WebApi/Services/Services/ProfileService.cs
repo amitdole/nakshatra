@@ -1,7 +1,7 @@
 ﻿using Nakshatra.HostedServices.Services.Repositories;
 using Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
 
-namespace Nakshatra.HostedServices.Services.Services;
+namespace Nakshatra.HostedServices.WebApi.Services.Services;
 
 public class ProfileService : IProfileService
 {

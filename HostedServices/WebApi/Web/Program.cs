@@ -8,7 +8,7 @@ using Nakshatra.Core.Services.Caching;
 using Nakshatra.HostedServices.Services.Contexts;
 using Nakshatra.HostedServices.Services.Queues;
 using Nakshatra.HostedServices.Services.Repositories;
-using Nakshatra.HostedServices.Services.Services;
+using Nakshatra.HostedServices.WebApi.Services.Services;
 using Serilog;
 
 try

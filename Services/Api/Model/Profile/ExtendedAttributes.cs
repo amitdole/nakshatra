@@ -1,4 +1,4 @@
-﻿namespace Nakshatra.Api.Model.Profile;
+﻿namespace Nakshatra.Services.Api.Model.Profile;
 
 public class ExtendedAttributes
 {

@@ -3,7 +3,7 @@ using Nakshatra.Api.Model.Profile;
 using Nakshatra.Api.Repositories;
 using Newtonsoft.Json;
 
-namespace DataServices
+namespace Nakshatra.DataServices
 {
     public class UserProfileRepository : IUserProfileRepository
     {

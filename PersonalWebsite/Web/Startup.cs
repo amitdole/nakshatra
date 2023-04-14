@@ -1,17 +1,16 @@
-﻿using DataServices;
-using Microsoft.ApplicationInsights.AspNetCore;
+﻿using Microsoft.ApplicationInsights.AspNetCore;
 using Microsoft.Extensions.Options;
-using Services.Profile;
 using Nakshatra.Api.Repositories;
 using Nakshatra.Api.Model.Service;
 using Nakshatra.Core.Api.Model.Caching;
 using Nakshatra.Core.Services.Caching;
 using System.Configuration;
-using Nakshatra.Api.Model.Profile;
+using Nakshatra.Services.Api.Model.Profile;
 using Nakshatra.Core.Services.Email;
 using Nakshatra.Services.Profile;
 using Serilog;
 using Serilog.Enrichers;
+using Nakshatra.DataServices;
 
 public class Startup
 {

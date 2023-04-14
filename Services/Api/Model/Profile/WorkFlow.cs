@@ -1,10 +1,9 @@
-﻿namespace Nakshatra.Api.Model.Profile
+﻿namespace Nakshatra.Services.Api.Model.Profile;
+
+[Serializable]
+public class WorkFlow
 {
-    [Serializable]
-    public class WorkFlow
-    {
-        public int WorkFlowId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-    }
+    public int WorkFlowId { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
 }

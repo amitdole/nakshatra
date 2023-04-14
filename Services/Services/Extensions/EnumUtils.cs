@@ -1,4 +1,4 @@
-﻿namespace Services.Extensions
+﻿namespace Nakshatra.Services.Extensions
 {
     public static class EnumUtils
     {

@@ -1,4 +1,4 @@
-﻿using Nakshatra.HostedServices.Services.Services;
+﻿using Nakshatra.HostedServices.WebApi.Services.Services;
 using Nakshatra.HostedServices.WebApi.Api.Entities.Reminders;
 
 namespace Nakshatra.HostedServices.WebApi.Web.Controllers;

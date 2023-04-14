@@ -1,6 +1,6 @@
 ﻿using Nakshatra.HostedServices.WebApi.Api.Entities.Profile;
 using Nakshatra.Core.Services.Caching;
-using Nakshatra.HostedServices.Services.Services;
+using Nakshatra.HostedServices.WebApi.Services.Services;
 
 namespace Nakshatra.HostedServices.WebApi.Web.Controllers;
 
