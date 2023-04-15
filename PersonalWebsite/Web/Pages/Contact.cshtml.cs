@@ -18,7 +18,7 @@ namespace Nakshatra.PersonalWebsite.Web.Pages
         private readonly ILogger<ContactModel> _logger;
 
 
-        [BindProperty]
+        [BindProperty(Name = "Profile")]
         public UserProfileInfo Profile { get; set; }
 
         [BindProperty]
@@ -60,6 +60,17 @@ namespace Nakshatra.PersonalWebsite.Web.Pages
         {
             try
             {
+                var profileId = int.Parse(_config["PersonalWebSiteUserId"]);
+                var profileCacheKey = string.Format(userProfileCacheKey, profileId);
+
+                if (!_cacheService.TryGet(profileCacheKey, out UserProfileInfo userProfile))
+                {
+                    userProfile = _userProfileService.GetUserProfile(profileId);
+                    _cacheService.Set(profileCacheKey, userProfile);
+                }
+
+                Profile = userProfile;
+
                 if (!ModelState.IsValid)
                 {
                     Success = false;
