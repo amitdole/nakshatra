@@ -36,16 +36,6 @@ try
                ExcludeVisualStudioCredential = true
            }));
 
-    //var keyVaultEndpoint = builder.Configuration["Keyvault:Uri"];
-
-    //var miCredentials = new DefaultAzureCredential();
-
-    //builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint), miCredentials,
-    //    new AzureKeyVaultConfigurationOptions
-    //    {
-    //        ReloadInterval = TimeSpan.FromMinutes(double.Parse(builder.Configuration["Keyvault:ReloadInterval"]))
-    //    });
-
     // Add services to the container.
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
