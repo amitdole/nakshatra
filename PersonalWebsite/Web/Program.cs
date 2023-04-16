@@ -1,4 +1,5 @@
 using Azure.Identity;
+using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
 
 namespace PersonalWebsite.Web
@@ -24,11 +25,12 @@ namespace PersonalWebsite.Web
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
            Host.CreateDefaultBuilder(args)
-            .UseSerilog()
             .ConfigureAppConfiguration((context, config) =>
             {
                 var root = config.Build();
-
+                config.AddEnvironmentVariables();
+                var env = context.HostingEnvironment;
+                config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true);
                 config.AddAzureKeyVault(new Uri($"{root["Keyvault:Uri"]}"),
        new DefaultAzureCredential(options: new DefaultAzureCredentialOptions
        {
@@ -42,6 +44,10 @@ namespace PersonalWebsite.Web
            ExcludeVisualStudioCredential = true
        }));
             })
+            .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                    .ReadFrom.Configuration(hostingContext.Configuration)
+                    .WriteTo.ApplicationInsights(new TelemetryConfiguration { ConnectionString = hostingContext.Configuration["PersonalWebsiteSuryaApplicationInsightsConnectionString"] }, TelemetryConverter.Traces)
+             )
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

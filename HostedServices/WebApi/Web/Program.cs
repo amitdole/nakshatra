@@ -1,114 +1,57 @@
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.AzureAppServices;
-using Nakshatra.Core.Api.Model.Caching;
-using Nakshatra.Core.Services.Caching;
-using Nakshatra.HostedServices.Services.Contexts;
-using Nakshatra.HostedServices.Services.Queues;
-using Nakshatra.HostedServices.Services.Repositories;
-using Nakshatra.HostedServices.WebApi.Services.Services;
+using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
+using Serilog.Formatting.Compact;
 
-try
+namespace PersonalWebsite.Web
 {
-
-    var builder = WebApplication.CreateBuilder(args);
-
-    var logger = new LoggerConfiguration()
-                            .ReadFrom.Configuration(builder.Configuration)
-                            .Enrich.FromLogContext()
-                            .CreateLogger();
-    builder.Host.UseSerilog(logger);
-
-    builder.Configuration.AddAzureKeyVault(
-           new Uri($"{builder.Configuration["Keyvault:Uri"]}"),
-           new DefaultAzureCredential(options: new DefaultAzureCredentialOptions
-           {
-               ExcludeAzurePowerShellCredential = true,
-               ExcludeEnvironmentCredential = true,
-               ExcludeInteractiveBrowserCredential = true,
-               ExcludeSharedTokenCacheCredential = true,
-               ExcludeVisualStudioCodeCredential = true,
-               ExcludeManagedIdentityCredential = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development,
-               ExcludeAzureCliCredential = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != Environments.Development,
-               ExcludeVisualStudioCredential = true
-           }));
-
-    // Add services to the container.
-    builder.Services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.Configure<AzureFileLoggerOptions>(builder.Configuration.GetSection("AzureLogging"));
-
-    builder.Services.AddDbContext<ProfileContext>(options =>
-                    options.UseCosmos(builder.Configuration["HastaCosmosConnectionString"],
-                        "Admin")
-                );
-    builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
-
-    builder.Services.AddScoped<IProfileService, ProfileService>();
-
-    builder.Services.AddScoped<IRemindersQueue, RemindersQueue>();
-
-    builder.Services.AddScoped<IReminderService, ReminderService>();
-
-    builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
+    public class Program
     {
-        ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]
-    });
+        public static void Main(string[] args)
+        {
+            try
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Unhandled exception");
+            }
+            finally
+            {
+                Log.Information("Shut down complete");
+                Log.CloseAndFlush();
+            }
+        }
 
-    builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection("CacheConfiguration"));
-
-    builder.Services.AddMemoryCache();
-
-    if (builder.Configuration["CacheProvider"].Equals("memory", StringComparison.InvariantCultureIgnoreCase))
-    {
-        builder.Services.AddTransient<ICacheService, MemoryCacheService>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+           Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                config.AddEnvironmentVariables();
+                var env = context.HostingEnvironment;
+                var root = config.Build();
+                config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true);
+                config.AddAzureKeyVault(new Uri($"{root["Keyvault:Uri"]}"),
+       new DefaultAzureCredential(options: new DefaultAzureCredentialOptions
+       {
+           ExcludeAzurePowerShellCredential = true,
+           ExcludeEnvironmentCredential = true,
+           ExcludeInteractiveBrowserCredential = true,
+           ExcludeSharedTokenCacheCredential = true,
+           ExcludeVisualStudioCodeCredential = true,
+           ExcludeManagedIdentityCredential = env.EnvironmentName == Environments.Development,
+           ExcludeAzureCliCredential = env.EnvironmentName == Environments.Development,
+           ExcludeVisualStudioCredential = true
+       }));
+            })
+             .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                    .ReadFrom.Configuration(hostingContext.Configuration)
+                    .WriteTo.ApplicationInsights(new TelemetryConfiguration { ConnectionString = hostingContext.Configuration["SuryaApplicationInsightsConnectionString"] }, TelemetryConverter.Traces)
+             )
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
-    else
-    {
-        builder.Services.AddTransient<ICacheService, RedisCacheService>();
-    }
-    //builder.Services.AddTransient<Func<CacheType, ICacheService>>(serviceProvider => key =>
-    //{
-    //    switch (key)
-    //    {
-    //        case CacheType.Memory:
-    //            return serviceProvider.GetService<MemoryCacheService>();
-    //        default:
-    //            return serviceProvider.GetService<RedisCacheService>();
-    //    }
-    //});
-
-
-    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-    var app = builder.Build();
-
-    app.UseSerilogRequestLogging();
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-    if (environment != Environments.Production)
-    {
-        app.UseDeveloperExceptionPage();
-    }
-    app.UseAuthorization();
-
-    app.MapControllers();
-
-    app.Run();
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Unhandled exception");
-}
-finally
-{
-    Log.Information("Shut down complete");
-    Log.CloseAndFlush();
 }
